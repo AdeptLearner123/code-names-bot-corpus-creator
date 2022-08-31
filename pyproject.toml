@@ -6,6 +6,10 @@ authors = ["Nalu Zou <zonalu@amazon.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+nltk = "^3.7"
+black = "^22.6.0"
+isort = "^5.10.1"
+tqdm = "^4.64.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
