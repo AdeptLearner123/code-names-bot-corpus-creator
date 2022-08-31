@@ -64,8 +64,8 @@ def save_words_from_page(page_id, results):
 
 
 def main():
-    prune()
-    return
+    #prune()
+    #return
 
     scraped_pages = os.listdir(OXFORD_WORD_LIST_DIR)
     scraped_pages = set(map(lambda file_name: int(file_name.split(".")[0]), scraped_pages))
