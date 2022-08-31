@@ -1,7 +1,7 @@
 import os
 
-import os
 from config import TARGET_LEMMA_LISTS
+
 from .oxford_definitions import OxfordDefinitions
 
 
@@ -18,7 +18,6 @@ def main():
 
     print("All targets: ", len(targets))
     print("Filtered targets: ", len(filtered_targets))
-
 
 
 if __name__ == "__main__":
