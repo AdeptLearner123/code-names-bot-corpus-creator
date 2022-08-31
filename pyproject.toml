@@ -17,6 +17,14 @@ beautifulsoup4 = "^4.11.1"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 
+[tool.poetry.scripts]
+format                  = "tasks:format"
+setup                   = "tasks:setup"
+
+get-word-freq           = "tools.get_word_freq:main"
+
+create-lemma-list       = "code_names_bot_oxford_downloader.create_lemma_list:main"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
