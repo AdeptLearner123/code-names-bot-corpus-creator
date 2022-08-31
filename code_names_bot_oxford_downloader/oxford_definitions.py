@@ -55,8 +55,15 @@ class OxfordDefinitions:
 
     def cache_result(self, query, result):
         self.cur.execute(
-            "INSERT INTO oxford_cache (query, result) VALUeS (?,?);", [query, result]
+            "INSERT INTO oxford_cache (query, result) VALUES (?,?);", [query, result]
         )
+
+    def get_all_cached(self):
+        self.cur.execute(
+            "SELECT query FROM oxford_cache"
+        )
+        rows = self.cur.fetchall()
+        return [row[0] for row in rows]
 
     def commit(self):
         self.con.commit()
