@@ -44,11 +44,7 @@ def main():
 
     print("Target pages", len(target_pages))
 
-    for page_id in tqdm(target_pages):
-        words = get_words_from_page(page_id)
-        
-        with open(os.path.join(OXFORD_WORD_LIST_DIR, f"{page_id}.txt"), "w+") as file:
-            file.write("\n".join(words))
+    download(target_pages)
 
 
 if __name__ == "__main__":
