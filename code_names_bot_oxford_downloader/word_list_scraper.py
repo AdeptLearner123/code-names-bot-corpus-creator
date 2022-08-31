@@ -22,7 +22,7 @@ def get_words_from_page(page_id):
 
 def main():
     scraped_pages = os.listdir(OXFORD_WORD_LIST_DIR)
-    scraped_pages = set(map(lambda file_name: int(file_name[0]), scraped_pages))
+    scraped_pages = set(map(lambda file_name: int(file_name.split(".")[0]), scraped_pages))
     target_pages = range(1, TOTAL_PAGES + 1)
     target_pages = list(filter(lambda page_id: page_id not in scraped_pages, target_pages))
 
