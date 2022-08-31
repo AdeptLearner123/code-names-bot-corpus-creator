@@ -3,7 +3,7 @@ import os
 from nltk.corpus import wordnet as wn
 from wordfreq import word_frequency
 
-from config import TARGET_LEMMA_LISTS
+from config import OXFORD_WORD_LIST_DIR, TARGET_LEMMA_LISTS
 
 WORD_FREQ_THRESHOLD = 1e-6
 
@@ -27,7 +27,11 @@ def save_lemmas(lemmas, length, file_name):
 
 
 def main():
-    lemmas = list(map(lambda lemma: lemma.replace("_", " "), wn.all_lemma_names()))
+    lemmas = []
+    for file_name in os.listdir(OXFORD_WORD_LIST_DIR):
+        with open(os.path.join(OXFORD_WORD_LIST_DIR, file_name), "r") as file:
+            lemmas += file.read().splitlines()
+
     total = 0
     total += save_lemmas(lemmas, 1, "wordnet_lemmas_1")
     total += save_lemmas(lemmas, 2, "wordnet_lemmas_2")

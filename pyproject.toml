@@ -26,6 +26,7 @@ get-word-freq           = "tools.get_word_freq:main"
 create-lemma-list       = "code_names_bot_oxford_downloader.create_lemma_list:main"
 downloader              = "code_names_bot_oxford_downloader.downloader:main"
 word-list-scraper       = "code_names_bot_oxford_downloader.word_list_scraper:main"
+extract-compounds       = "code_names_bot_oxford_downloader.extract_compounds:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
