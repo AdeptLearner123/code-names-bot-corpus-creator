@@ -6,8 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
-
 CHUNK_SIZE = 100
+
 
 def scrape(url_maker, target_ids, extractor, save_dir, headers):
     scraped_pages = os.listdir(save_dir)
@@ -35,7 +35,13 @@ def download(target_ids, url_maker, extractor, save_dir, headers):
             print("Target ids", len(target_chunk))
             with ThreadPoolExecutor(max_workers=len(target_ids)) as ex:
                 futures = [
-                    ex.submit(save_words_from_page, url_maker(page_id), page_id, results, headers)
+                    ex.submit(
+                        save_words_from_page,
+                        url_maker(page_id),
+                        page_id,
+                        results,
+                        headers,
+                    )
                     for page_id in target_chunk
                 ]
                 for future in as_completed(futures):
@@ -47,24 +53,22 @@ def download(target_ids, url_maker, extractor, save_dir, headers):
                 if page_id not in results:
                     chunk_failed += 1
                     continue
-            
+
                 soup = BeautifulSoup(results[page_id], "html.parser")
-                
+
                 try:
                     output = extractor(soup)
                 except:
                     print("Failed for", url_maker(page_id))
                     print(results[page_id])
                     raise
-                
+
                 if len(output) > 0:
-                    with open(
-                        os.path.join(save_dir, f"{page_id}.txt"), "w+"
-                    ) as file:
+                    with open(os.path.join(save_dir, f"{page_id}.txt"), "w+") as file:
                         file.write("\n".join(output))
                 else:
                     chunk_failed += 1
-            
+
             if chunk_failed > 0:
                 print("Chunk Failed", chunk_failed)
                 break

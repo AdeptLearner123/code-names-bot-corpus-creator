@@ -20,7 +20,13 @@ def extract_terms(soup):
 def main():
     target_ids = range(1, TOTAL_PAGES + 1)
     target_ids = list(map(lambda target_id: str(target_id), target_ids))
-    scrape(GET_URL, target_ids, extract_terms, OXFORD_WORD_LIST_DIR, headers={"User-Agent": "Mozilla/6.0"})
+    scrape(
+        GET_URL,
+        target_ids,
+        extract_terms,
+        OXFORD_WORD_LIST_DIR,
+        headers={"User-Agent": "Mozilla/6.0"},
+    )
 
 
 if __name__ == "__main__":
