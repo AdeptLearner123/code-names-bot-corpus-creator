@@ -14,7 +14,7 @@ def main():
         with open(os.path.join(OXFORD_WORD_LIST_DIR, file_name), "r") as file:
             lemmas += file.read().splitlines()
 
-    compounds = list(filter(lambda lemma: " " in lemma and "," not in lemma, lemmas))
+    compounds = list(filter(lambda lemma: " " in lemma, lemmas))
 
     with open(COMPOUNDS_LIST_PATH, "w+") as file:
         file.write("\n".join(compounds))
