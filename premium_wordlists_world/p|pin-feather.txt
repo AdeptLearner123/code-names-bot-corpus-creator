@@ -1,0 +1,50 @@
+pin feather
+pin flag
+pin grass
+pin hinge
+pin key
+pin leg
+pin lever
+pin lock
+pin machine
+pin man
+pin money
+pin oak
+pin on
+pin one's ears back
+pin one's hopes on
+pin pallet
+pin paper
+pin party
+pin plate
+pin pool
+pin poppet
+pin rib
+pin seal
+pin stenter
+pin stitch
+pin stitching
+pin switch
+pin table
+pin tongs
+pin tooth
+pin valve
+pin vice
+pin work
+pin's worth
+pin-brained
+pin-connected
+pin-drop
+pin-dropping
+pin-dust
+pin-eyed
+pin-feathered
+pin-fire
+pin-fit
+pin-heading
+pin-heel
+pin-heeled
+pin-high
+pin-hook
+pin-hooker
+pin-horse

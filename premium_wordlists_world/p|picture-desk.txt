@@ -1,0 +1,50 @@
+picture desk
+picture disc
+picture document
+picture editor
+picture element
+picture frame
+picture framing
+picture frequency
+picture gallery
+picture garden
+picture hat
+picture house
+picture language
+picture lens
+picture lesson
+picture magazine
+picture message
+picture messaging
+picture miniature
+picture monitor
+picture mosaic
+picture moulding
+picture palace
+picture phone
+picture plane
+picture play
+picture postcard
+picture rail
+picture researcher
+picture ring
+picture rod
+picture search
+picture show
+picture signal
+picture sleeve
+picture space
+picture stage
+picture telegraphy
+picture telephone
+picture tie
+picture tube
+picture window
+picture wire
+picture writing
+picture-drawer
+picture-drawing
+picture-face
+picture-frustration
+picture-hatted
+picture-in-picture

@@ -9,11 +9,11 @@ def main():
     lemmas = set()
     for file_name in os.listdir(PREMIUM_OXFORD_WORD_LIST_DIR_US):
         with open(os.path.join(PREMIUM_OXFORD_WORD_LIST_DIR_US, file_name), "r") as file:
-            lemmas += set(file.read().splitlines())
+            lemmas = lemmas.union(set(file.read().splitlines()))
 
     for file_name in os.listdir(PREMIUM_OXFORD_WORD_LIST_DIR_WORLD):
-        with open(os.path.join(PREMIUM_OXFORD_WORD_LIST_DIR_US, file_name), "r") as file:
-            lemmas += set(file.read().splitlines())
+        with open(os.path.join(PREMIUM_OXFORD_WORD_LIST_DIR_WORLD, file_name), "r") as file:
+            lemmas = lemmas.union(set(file.read().splitlines()))
     
     lemmas = list(lemmas)
 
