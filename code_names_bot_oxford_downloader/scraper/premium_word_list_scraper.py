@@ -1,19 +1,14 @@
 import os
-from ast import literal_eval as make_tuple
 
 from unidecode import unidecode
-
-from config import (PREMIUM_OXFORD_WORD_LIST_DIR,
-                    PREMIUM_OXFORD_WORD_LIST_TARGETS_DIR)
-
 from .scraper import scrape
+
 
 WORD_OVERRIDES = {"°": "°"}
 
 GET_URL = (
     lambda item: f"https://premium-oxforddictionaries-com.offcampus.lib.washington.edu/us/browse/american_english/{item.split('|')[0]}/{item.split('|')[1]}/"
 )
-# GET_URL = lambda str: "Joke " + str
 
 
 def extract(soup):
@@ -39,12 +34,12 @@ def format_word(word):
     return word.replace(">", "\u2014").replace("<", "\u2013")
 
 
-def get_targets():
+def get_targets(word_list_targets_dir):
     targets = []
-    for file_name in os.listdir(PREMIUM_OXFORD_WORD_LIST_TARGETS_DIR):
+    for file_name in os.listdir(word_list_targets_dir):
         letter = file_name.split(".")[0]
         with open(
-            os.path.join(PREMIUM_OXFORD_WORD_LIST_TARGETS_DIR, file_name), "r"
+            os.path.join(word_list_targets_dir, file_name), "r"
         ) as file:
             targets += list(
                 map(
@@ -55,21 +50,19 @@ def get_targets():
     return targets
 
 
-def main():
+def scrape_premium(word_list_targets_dir, word_lists_dir, dictionary_name):
     print(format_word("Wouldn't you like to know?"))
-    targets = get_targets()
+    targets = get_targets(word_list_targets_dir)
+
+    get_url = lambda item: f"https://premium-oxforddictionaries-com.offcampus.lib.washington.edu/us/browse/{dictionary_name}/{item.split('|')[0]}/{item.split('|')[1]}/"
 
     scrape(
-        GET_URL,
+        get_url,
         targets,
         extract,
-        PREMIUM_OXFORD_WORD_LIST_DIR,
+        word_lists_dir,
         headers={
             "User-Agent": "Mozilla/6.0",
-            "Cookie": "_ga=GA1.2.1761768241.1655574857; _ga_3T65WK0BM8=GS1.1.1661471019.7.0.1661471019.0.0.0; _ga_JLHM9WH4JV=GS1.1.1661471019.7.0.1661471019.0.0.0; nmstat=10857d25-4bfe-6f03-1dc1-5298ad5578ca; _mkto_trk=id:131-AQO-225&token:_mch-washington.edu-1656568436075-85816; _ga_57P4HTBKTG=GS1.1.1658767967.2.0.1658767967.0; ezproxyuwlib=jacs00pTiEcwmVF; _gid=GA1.2.1888116142.1662056817; localisation=US; JSESSIONID=F2BD42E4ADBF590C0831808540C8FB8E; SaneID=oi6OAmvT8jP-dQNDAmp; cookieLaw=true; XSRF-TOKEN=b74d8174-4ec7-4b07-bc66-15491c04ed30",
+            "Cookie": "_ga=GA1.2.1761768241.1655574857; _ga_3T65WK0BM8=GS1.1.1661471019.7.0.1661471019.0.0.0; _ga_JLHM9WH4JV=GS1.1.1661471019.7.0.1661471019.0.0.0; nmstat=10857d25-4bfe-6f03-1dc1-5298ad5578ca; _mkto_trk=id:131-AQO-225&token:_mch-washington.edu-1656568436075-85816; _ga_57P4HTBKTG=GS1.1.1658767967.2.0.1658767967.0; ezproxyuwlib=HsfMJFVlkZKnhW5; localisation=US; JSESSIONID=676F28D29FD329586B5E9C88188B6AE4; SaneID=oi6OAmvT8jP-dQNDAmp; cookieLaw=true; XSRF-TOKEN=2731da63-288e-4c96-9b6c-218f3e45aed1",
         },
     )
-
-
-if __name__ == "__main__":
-    main()

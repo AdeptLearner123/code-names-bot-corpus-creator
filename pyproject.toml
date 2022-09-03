@@ -29,8 +29,10 @@ downloader              = "code_names_bot_oxford_downloader.downloader:main"
 create-wordlist         = "code_names_bot_oxford_downloader.create_wordlist:main"
 
 word-list-scraper       = "code_names_bot_oxford_downloader.scraper.word_list_scraper:main"
-premium-scraper         = "code_names_bot_oxford_downloader.scraper.premium_word_list_scraper:main"
-premium-target-scraper  = "code_names_bot_oxford_downloader.scraper.premium_word_list_target_scraper:main"
+scrape-words-us         = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_words_us"
+scrape-targets-us       = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_targets_us"
+scrape-words-world      = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_words_world"
+scrape-targets-world    = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_targets_world"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
