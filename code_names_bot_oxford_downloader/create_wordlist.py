@@ -1,9 +1,6 @@
 import os
 
-from nltk.corpus import wordnet as wn
-from wordfreq import word_frequency
-
-from config import COMPOUNDS_LIST_PATH, PREMIUM_OXFORD_WORD_LIST_DIR
+from config import WORDLIST_PATH, PREMIUM_OXFORD_WORD_LIST_DIR
 
 WORD_FREQ_THRESHOLD = 1e-6
 
@@ -14,10 +11,8 @@ def main():
         with open(os.path.join(PREMIUM_OXFORD_WORD_LIST_DIR, file_name), "r") as file:
             lemmas += file.read().splitlines()
 
-    compounds = list(filter(lambda lemma: " " in lemma, lemmas))
-
-    with open(COMPOUNDS_LIST_PATH, "w+") as file:
-        file.write("\n".join(compounds))
+    with open(WORDLIST_PATH, "w+") as file:
+        file.write("\n".join(lemmas))
 
 
 if __name__ == "__main__":

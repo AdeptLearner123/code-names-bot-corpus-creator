@@ -26,7 +26,7 @@ get-word-freq           = "tools.get_word_freq:main"
 
 create-lemma-list       = "code_names_bot_oxford_downloader.create_lemma_list:main"
 downloader              = "code_names_bot_oxford_downloader.downloader:main"
-extract-compounds       = "code_names_bot_oxford_downloader.extract_compounds:main"
+create-wordlist         = "code_names_bot_oxford_downloader.create_wordlist:main"
 
 word-list-scraper       = "code_names_bot_oxford_downloader.scraper.word_list_scraper:main"
 premium-scraper         = "code_names_bot_oxford_downloader.scraper.premium_word_list_scraper:main"
