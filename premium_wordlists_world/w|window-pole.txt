@@ -1,0 +1,50 @@
+window pole
+window post
+window recess
+Window Rock
+window sash
+window screen
+window scrim
+window seat
+window shade
+window shaft
+window shelf
+window shell
+window shopping
+window shutter
+window slab
+window slit
+window sticker
+window stone
+window stool
+window strap
+window surveyor
+window swallow
+window table
+window tax
+window tracery
+window treatment
+window trimmer
+window trimming
+window unit
+window void
+window washer
+window weight
+window winder
+window work
+window-based
+window-bottom
+window-broken
+window-gaze
+window-leaf
+window-mount
+window-shop
+window-sole
+window-song
+windowed
+windowful
+windowing
+windowless
+windowpane
+windowpane check
+windowpane-checked

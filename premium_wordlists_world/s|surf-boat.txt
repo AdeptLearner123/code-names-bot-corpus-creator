@@ -1,0 +1,50 @@
+surf boat
+surf boatman
+surf break
+surf carnival
+surf clam
+surf club
+surf coot
+surf culture
+surf day
+surf duck
+surf fish
+surf leash
+surf lifesaving
+surf lifesaving club
+surf line
+surf mat
+surf mattress
+surf music
+surf patrol
+surf punk
+surf rack
+surf rat
+surf report
+surf rock
+surf safari
+surf scoter
+surf shop
+surf shorts
+surf ski
+surf skiing
+surf smelt
+surf spot
+surf swimmer
+surf swimming
+surf talk
+surf wax
+surf whiting
+surf zone
+surf-bather
+surf-bum
+surf-cast
+surf-grass
+surf-ride
+surf-rider
+surf-riding
+surf-speak
+surfable
+surface
+surface activity
+surface blow

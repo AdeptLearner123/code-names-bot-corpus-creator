@@ -1,0 +1,50 @@
+leaf scorch
+leaf shape
+leaf sheath
+leaf shedding
+leaf shelter
+leaf shutter
+leaf sight
+leaf silver
+leaf skin
+leaf soil
+leaf spinach
+leaf spine
+leaf spot
+leaf spring
+leaf springing
+leaf succulent
+leaf surface
+leaf table
+leaf tea
+leaf teeth
+leaf tendril
+leaf thorn
+leaf tin
+leaf tobacco
+leaf trace
+leaf valve
+leaf vegetable
+leaf warbler
+leaf wasp
+leaf work
+leaf worm
+leaf-bearing
+leaf-bladed
+leaf-carved
+leaf-cutting ant
+leaf-cutting bee
+leaf-eared mouse
+leaf-fall
+leaf-feeder
+leaf-footed
+leaf-mining
+leaf-nosed
+leaf-nosed bat
+leaf-opposed
+leaf-rolling
+leaf-shaped
+leaf-sprung
+leaf-tailed
+leaf-tailed gecko
+leafbird

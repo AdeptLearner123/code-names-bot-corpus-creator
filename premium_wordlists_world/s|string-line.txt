@@ -1,0 +1,50 @@
+string line
+string orchestra
+string out
+string quartet
+string theory
+string tie
+string together
+string up
+string vest
+string-puller
+stringboard
+stringed
+stringendo
+stringent
+stringer
+stringhalt
+stringpiece
+stringy
+stringybark
+stringybark cockatoo
+strip
+strip city
+strip club
+strip cropping
+strip light
+strip mall
+strip mill
+strip mine
+strip poker
+strip steak
+strip-mining
+strip-search
+stripe
+striped
+striped bass
+striped hyena
+striped maple
+striped muscle
+striped polecat
+striper
+stripling
+stripped-down
+stripper
+strippergram
+striptease
+stripy
+strive
+strobe
+strobila
+strobilus

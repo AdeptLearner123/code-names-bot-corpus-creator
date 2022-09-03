@@ -1,0 +1,50 @@
+native cat
+native cherry
+native companion
+native currant
+native daphne
+native doctor
+native dog
+native flax
+native forest
+native friendship centre
+native garden
+native harebell
+Native Hawaiian
+native heath
+native hen
+native laurel
+native law
+native location
+native logging
+native metal
+native mulberry
+native orange
+native oven
+native peach
+native pomegranate
+native poplar
+native potato
+native problem
+native question
+native quince
+native reserve
+native rights
+native rock
+native son
+native speaker
+native state
+native tamarind
+native thrush
+native title
+native trade
+native trout
+native willow
+native wit
+native-born
+native-like
+nativism
+nativist
+nativity
+nativity play
+nativity scene
