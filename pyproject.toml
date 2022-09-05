@@ -33,6 +33,7 @@ scrape-words-us         = "code_names_bot_oxford_downloader.scraper.scrape_premi
 scrape-targets-us       = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_targets_us"
 scrape-words-world      = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_words_world"
 scrape-targets-world    = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_targets_world"
+setup-cache            = "code_names_bot_oxford_downloader.setup_cache:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

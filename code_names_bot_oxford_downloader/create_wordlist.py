@@ -2,9 +2,6 @@ import os
 
 from config import WORDLIST_PATH, PREMIUM_OXFORD_WORD_LIST_DIR_US, PREMIUM_OXFORD_WORD_LIST_DIR_WORLD
 
-WORD_FREQ_THRESHOLD = 1e-6
-
-
 def main():
     lemmas = set()
     for file_name in os.listdir(PREMIUM_OXFORD_WORD_LIST_DIR_US):

@@ -1,5 +1,5 @@
 OXFORD_CACHE_PATH = (
-    "/Users/zonalu/code-names-bot-text-processor/data/oxford_cache.sqlite"
+    "/Users/zonalu/oxford_cache/oxford_cache.sqlite"
 )
 OXFORD_WORD_LIST_DIR = "wordlists/"
 PREMIUM_OXFORD_WORD_LIST_DIR_US = "premium_wordlists_us"
