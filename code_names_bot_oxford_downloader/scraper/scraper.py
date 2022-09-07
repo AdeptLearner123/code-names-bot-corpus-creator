@@ -6,8 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
-CHUNK_SIZE = 1
-#CHUNK_SIZE = 100
+CHUNK_SIZE = 100
 
 
 def scrape(url_maker, target_ids, extractor, save_dir, headers):
@@ -26,7 +25,6 @@ def scrape(url_maker, target_ids, extractor, save_dir, headers):
 
 def download(target_ids, url_maker, extractor, save_dir, headers):
     start_time = time.time()
-    failed = 0
 
     with tqdm(total=len(target_ids)) as pbar:
         for i in range(0, len(target_ids), CHUNK_SIZE):
@@ -34,8 +32,7 @@ def download(target_ids, url_maker, extractor, save_dir, headers):
             results = dict()
 
             print("Target ids", len(target_chunk))
-            #with ThreadPoolExecutor(max_workers=len(target_ids)) as ex:
-            with ThreadPoolExecutor(max_workers=1) as ex:
+            with ThreadPoolExecutor(max_workers=len(target_ids)) as ex:
                 futures = [
                     ex.submit(
                         save_words_from_page,
