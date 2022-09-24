@@ -7,8 +7,12 @@ import requests
 from tqdm import tqdm
 
 from code_names_bot_corpus_creator.caches.oxford_cache import OxfordCache
-from config import (FILTERED_LEMMAS, MISSING_US_LEMMAS, SCRAPED_LEMMAS_US_DIR,
-                    SCRAPED_LEMMAS_WORLD_DIR)
+from config import (
+    FILTERED_LEMMAS,
+    MISSING_US_LEMMAS,
+    SCRAPED_LEMMAS_US_DIR,
+    SCRAPED_LEMMAS_WORLD_DIR,
+)
 from credentials import OXFORD_APP_ID, OXFORD_APP_KEY
 
 GET_URL = (

@@ -2,8 +2,7 @@ import os
 
 from wordfreq import word_frequency
 
-from config import (FILTERED_LEMMAS, SCRAPED_LEMMAS_US_DIR,
-                    SCRAPED_LEMMAS_WORLD_DIR)
+from config import FILTERED_LEMMAS, SCRAPED_LEMMAS_US_DIR, SCRAPED_LEMMAS_WORLD_DIR
 
 FREQUENCY_THRESHOLD = 1e-5
 
