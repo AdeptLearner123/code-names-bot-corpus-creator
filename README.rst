@@ -9,3 +9,8 @@
 Downloading Wikipedia page titles and ids
 #. Download dump from https://dumps.wikimedia.org/enwiki/latest/
 #. Download MySQL and read the dump into a database
+
+
+Downloading wikipedia page views
+#. Use an Ubuntu machine
+#. ``poetry run download-wiki-page-views``

@@ -27,6 +27,7 @@ estimate-download-cost          = "tools.estimate_download_cost:main"
 scrape-oxford-lemmas            = "code_names_bot_corpus_creator.oxford_scraper.scrape_oxford_lemmas:main"
 create-filtered-lemmas-list     = "code_names_bot_corpus_creator.oxford_entries_download.create_filtered_lemmas_list:main"
 download-lemmas-entries         = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_entries:main"
+download-wiki-page-views        = "code_names_bot_corpus_creator.wiki_page_views_download.wiki_page_views_downloader:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
