@@ -1,12 +1,11 @@
 [tool.poetry]
-name = "code-names-bot-oxford-downloader"
+name = "code-names-bot-corpus-creator"
 version = "0.1.0"
 description = ""
-authors = ["Nalu Zou <zonalu@amazon.com>"]
+authors = ["Nalu Zou <nalu.zou@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-nltk = "^3.7"
 black = "^22.6.0"
 isort = "^5.10.1"
 tqdm = "^4.64.0"
@@ -19,25 +18,15 @@ Unidecode = "^1.3.4"
 pytest = "^5.2"
 
 [tool.poetry.scripts]
-format                  = "tasks:format"
-setup                   = "tasks:setup"
+format                          = "tasks:format"
 
-get-word-freq           = "tools.get_word_freq:main"
-get-oxford-definition   = "tools.get_oxford_definition:main"
-get-all-cached          = "tools.get_all_cached:main"
+get-word-freq                   = "tools.get_word_freq:main"
+get-cached-result               = "tools.get_cached_words_result:main"
+estimate-download-cost          = "tools.estimate_download_cost:main"
 
-create-lemma-list       = "code_names_bot_oxford_downloader.create_lemma_list:main"
-downloader              = "code_names_bot_oxford_downloader.downloader:main"
-create-wordlist         = "code_names_bot_oxford_downloader.create_wordlist:main"
-filter-wordlist         = "code_names_bot_oxford_downloader.create_filtered_wordlist:main"
-
-word-list-scraper       = "code_names_bot_oxford_downloader.scraper.word_list_scraper:main"
-scrape-words-us         = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_words_us"
-scrape-targets-us       = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_targets_us"
-scrape-words-world      = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_words_world"
-scrape-targets-world    = "code_names_bot_oxford_downloader.scraper.scrape_premium:scrape_targets_world"
-setup-cache             = "code_names_bot_oxford_downloader.setup_cache:main"
-download-definitions    = "code_names_bot_oxford_downloader.download_definitions:main"
+scrape-oxford-lemmas            = "code_names_bot_corpus_creator.oxford_scraper.scrape_oxford_lemmas:main"
+create-filtered-lemmas-list     = "code_names_bot_corpus_creator.oxford_entries_download.create_filtered_lemmas_list:main"
+download-lemmas-entries         = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_entries:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

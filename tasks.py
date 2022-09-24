@@ -23,15 +23,6 @@ def _command(command: Union[List[str], str], shell: bool = False):
         sys.exit(command_exit_code)
 
 
-def setup():
-    import nltk
-
-    nltk.download("omw-1.4")
-    nltk.download("wordnet")
-
-    _command(["spacy", "download", "en_core_web_sm"])
-
-
 def format():
     _command(["black", "."])
     _command(["isort", "."])
