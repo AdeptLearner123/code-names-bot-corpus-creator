@@ -42,21 +42,12 @@ def download_page_views(timestamps):
 
     print("Downloading timestamps", "Total:", len(timestamps), "Downloading:", len(undownloaded_timestamps))
 
-    with tqdm(total=len(undownloaded_timestamps)) as pbar:
-        for i in range(0, len(undownloaded_timestamps), DOWNLOAD_BATCH_SIZE):
-            batch_timestamps = undownloaded_timestamps[i:i + DOWNLOAD_BATCH_SIZE]
-
-            batch_urls = [GET_URL(*timestamp) for timestamp in batch_timestamps]
-            procs = [command(["wget", url], WIKI_PAGE_VIEWS_DUMP_DIR) for url in batch_urls]
-            for proc in procs:
-                proc.wait()
-            
-            batch_zipped_files = [GET_ZIPPED_FILE_NAME(*timestamp) for timestamp in batch_timestamps]
-            procs = [command(["gzip", "-d", batch_zipped_files], WIKI_PAGE_VIEWS_DUMP_DIR) for zipped_file in batch_zipped_files]
-            for proc in procs:
-                proc.wait()
-            
-            pbar.update(DOWNLOAD_BATCH_SIZE)
+    for timestamp in tqdm(undownloaded_timestamps):
+        url = GET_URL(*timestamp)
+        command(["wget", url], WIKI_PAGE_VIEWS_DUMP_DIR)
+        
+        zipped_file = GET_ZIPPED_FILE_NAME(*timestamp)
+        command(["gzip", "-d", zipped_file], WIKI_PAGE_VIEWS_DUMP_DIR)
 
 
 def parse_page_views(timestamp):
@@ -66,13 +57,14 @@ def parse_page_views(timestamp):
         lines = file.read().splitlines()
         lines = filter(lambda line: line.startswith("en"), lines)
         lines = [line.split(" ") for line in lines]
+        lines = filter(lambda line: len(line) >= 3, lines)
         page_views = {line[1]: int(line[2]) for line in lines}
 
     return Counter(page_views)
 
 
 def command(command, cwd):
-    return subprocess.Popen(
+    return subprocess.run(
         command,
         cwd=cwd,
         shell=False,
