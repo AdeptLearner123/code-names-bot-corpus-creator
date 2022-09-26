@@ -33,7 +33,7 @@ create-filtered-lemmas-list     = "code_names_bot_corpus_creator.oxford_entries_
 setup-oxford-cache              = "code_names_bot_corpus_creator.oxford_entries_download.setup_oxford_cache:main"
 download-lemma-entries          = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_entries:main"
 
-compile-wiki-page-list          = "code_names_bot_corpus_creator.wiki_page_list_compiler.compile_wiki_page_list:main"
+setup-page-views-cache          = "code_names_bot_corpus_creator.wiki_page_views_download.setup_page_views_cache:main"
 
 download-wiki-page-views        = "code_names_bot_corpus_creator.wiki_page_views_download.wiki_page_views_downloader:main"
 
