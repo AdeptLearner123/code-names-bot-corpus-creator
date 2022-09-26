@@ -104,16 +104,16 @@ def get_lemma_to_region():
     for file_name in os.listdir(SCRAPED_LEMMAS_WORLD_DIR):
         with open(os.path.join(SCRAPED_LEMMAS_WORLD_DIR, file_name), "r") as file:
             for lemma in file.read().splitlines():
-                lemma_to_region[lemma] = False
+                lemma_to_region[lemma.lower()] = False
 
     for file_name in os.listdir(SCRAPED_LEMMAS_US_DIR):
         with open(os.path.join(SCRAPED_LEMMAS_US_DIR, file_name), "r") as file:
             for lemma in file.read().splitlines():
-                lemma_to_region[lemma] = True
+                lemma_to_region[lemma.lower()] = True
 
     with open(MISSING_US_LEMMAS, "r") as file:
         for lemma in file.read().splitlines():
-            lemma_to_region[lemma] = False
+            lemma_to_region[lemma.lower()] = False
 
     return lemma_to_region
 
