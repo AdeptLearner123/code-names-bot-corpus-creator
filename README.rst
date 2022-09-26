@@ -9,6 +9,8 @@
 Downloading Wikipedia page titles and ids
 #. Download dump from https://dumps.wikimedia.org/enwiki/latest/
 #. Download MySQL and read the dump into a database
+#. Run this SQL command: ``SELECT page_id, page_title FROM page WHERE page_namespace=0 AND page_is_redirect=0 INTO OUTFILE '/var/lib/mysql-files/wiki_pages.txt';``
+#. Copy this file into ``/data/wiki_page_list_compiler/wiki_pages.txt``
 
 
 Downloading wikipedia page views
