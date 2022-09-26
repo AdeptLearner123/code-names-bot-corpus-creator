@@ -98,31 +98,12 @@ def get_lemma_entry(url, lemma, results):
     results[lemma] = r
 
 
-def get_lemma_to_region():
-    lemma_to_region = dict()
-
-    for file_name in os.listdir(SCRAPED_LEMMAS_WORLD_DIR):
-        with open(os.path.join(SCRAPED_LEMMAS_WORLD_DIR, file_name), "r") as file:
-            for lemma in file.read().splitlines():
-                lemma_to_region[lemma.lower()] = False
-
-    for file_name in os.listdir(SCRAPED_LEMMAS_US_DIR):
-        with open(os.path.join(SCRAPED_LEMMAS_US_DIR, file_name), "r") as file:
-            for lemma in file.read().splitlines():
-                lemma_to_region[lemma.lower()] = True
-
-    with open(MISSING_US_LEMMAS, "r") as file:
-        for lemma in file.read().splitlines():
-            lemma_to_region[lemma.lower()] = False
-
-    return lemma_to_region
-
-
 def main():
     with open(FILTERED_LEMMAS, "r") as file:
-        lemmas = file.read().splitlines()
-
-    lemma_to_region = get_lemma_to_region()
+        lemma_regions = file.read().splitlines()
+        lemma_regions = list(map(lambda lemma_region: lemma_region.split("|"), lemma_regions))
+        lemma_to_region = { lemma_region[0]: lemma_region[1] == "us" for lemma_region in lemma_regions }
+        lemmas = lemma_to_region.keys()
 
     cached_lemmas = oxford_cache.get_all_cached()
     uncached_lemmas = list(set(lemmas).difference(set(cached_lemmas)))

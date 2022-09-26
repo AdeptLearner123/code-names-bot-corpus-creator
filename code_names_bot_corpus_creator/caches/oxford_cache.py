@@ -25,6 +25,9 @@ class OxfordCache:
             """
         )
 
+    def insert_query(self, query):
+        self.cur.execute("INSERT INTO oxford_cache (query) VALUES (?)", [query])
+
     def get_cached_word_result(self, query):
         self.cur.execute(
             "SELECT words_result FROM oxford_cache WHERE query=? LIMIT 1", [query]

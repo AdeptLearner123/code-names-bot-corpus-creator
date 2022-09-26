@@ -2,30 +2,24 @@ import os
 
 from wordfreq import word_frequency
 
-from config import FILTERED_LEMMAS, SCRAPED_LEMMAS_US_DIR, SCRAPED_LEMMAS_WORLD_DIR
+from config import FILTERED_LEMMAS, ALL_LEMMAS
 
 FREQUENCY_THRESHOLD = 1e-6
 
 
 def main():
-    lemmas = set()
-    for file_name in os.listdir(SCRAPED_LEMMAS_US_DIR):
-        with open(os.path.join(SCRAPED_LEMMAS_US_DIR, file_name), "r") as file:
-            lemmas = lemmas.union(set(file.read().splitlines()))
+    with open(ALL_LEMMAS, "r") as file:
+        lemma_regions = file.read().splitlines()
 
-    for file_name in os.listdir(SCRAPED_LEMMAS_WORLD_DIR):
-        with open(os.path.join(SCRAPED_LEMMAS_WORLD_DIR, file_name), "r") as file:
-            lemmas = lemmas.union(set(file.read().splitlines()))
-
-    lemmas = list(lemmas)
-    lemmas = map(lambda lemma: lemma.lower(), lemmas)
-    lemmas = filter(
-        lambda lemma: word_frequency(lemma, "en") > FREQUENCY_THRESHOLD, lemmas
+    lemma_regions = filter(
+        lambda lemma_region: word_frequency(lemma_region.split("|")[0], "en")
+        > FREQUENCY_THRESHOLD,
+        lemma_regions,
     )
-    lemmas = set(lemmas)
+    lemma_regions = list(lemma_regions)
 
     with open(FILTERED_LEMMAS, "w+") as file:
-        file.write("\n".join(lemmas))
+        file.write("\n".join(lemma_regions))
 
 
 if __name__ == "__main__":
