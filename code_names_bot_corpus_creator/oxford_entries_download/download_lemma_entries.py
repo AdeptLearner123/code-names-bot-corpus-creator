@@ -101,8 +101,12 @@ def get_lemma_entry(url, lemma, results):
 def main():
     with open(FILTERED_LEMMAS, "r") as file:
         lemma_regions = file.read().splitlines()
-        lemma_regions = list(map(lambda lemma_region: lemma_region.split("|"), lemma_regions))
-        lemma_to_region = { lemma_region[0]: lemma_region[1] == "us" for lemma_region in lemma_regions }
+        lemma_regions = list(
+            map(lambda lemma_region: lemma_region.split("|"), lemma_regions)
+        )
+        lemma_to_region = {
+            lemma_region[0]: lemma_region[1] == "us" for lemma_region in lemma_regions
+        }
         lemmas = lemma_to_region.keys()
 
     cached_lemmas = oxford_cache.get_all_cached()
