@@ -1,7 +1,6 @@
-from re import M
 from code_names_bot_corpus_creator.download.caches import WikiPageViewCache
 from code_names_bot_corpus_creator.download.api_downloader import download
-from config import WIKI_PAGES, MISSING_WIKI_PAGE_VIEWS
+from config import DUMP_PAGE_VIEW_FILTERED, MISSING_WIKI_PAGE_VIEWS
 
 GET_URL = (
     lambda page_title: f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{page_title}/monthly/2021010100/2021123100"
@@ -34,7 +33,7 @@ def process_result(key, result):
 
 
 def main():
-    with open(WIKI_PAGES, "r") as file:
+    with open(DUMP_PAGE_VIEW_FILTERED, "r") as file:
         page_id_titles = file.read().splitlines()
         page_id_titles = map(
             lambda page_id_title: page_id_title.split("\t"), page_id_titles
@@ -54,7 +53,7 @@ def main():
         cache=WikiPageViewCache(),
         process_result=process_result,
         chunk_size=20,
-        download_rate=200,
+        download_rate=1.5,
     )
 
 
