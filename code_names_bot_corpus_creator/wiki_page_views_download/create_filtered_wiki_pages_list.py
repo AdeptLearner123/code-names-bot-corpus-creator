@@ -27,7 +27,7 @@ def main():
     )
 
     filtered_page_id_titles = list(
-        map(lambda page_id, title: f"{page_id}\t{title}", filtered_non_lists)
+        map(lambda page_id_title: "\t".join(page_id_title), filtered_non_lists)
     )
 
     with open(DUMP_PAGE_VIEW_FILTERED, "w+") as file:
