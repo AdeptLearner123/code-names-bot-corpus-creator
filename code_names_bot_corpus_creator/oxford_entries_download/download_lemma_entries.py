@@ -1,3 +1,4 @@
+import chunk
 import json
 from code_names_bot_corpus_creator.download.api_downloader import download
 from code_names_bot_corpus_creator.download.caches import OxfordCache
@@ -60,6 +61,7 @@ def main():
         ),
         cache=OxfordCache(),
         process_result=process_result,
+        chunk_size=5,
         download_rate=1,  # Oxford API limits usage to 1 request / second
     )
 
