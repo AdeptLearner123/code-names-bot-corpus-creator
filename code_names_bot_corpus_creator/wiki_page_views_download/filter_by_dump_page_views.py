@@ -18,7 +18,7 @@ def main():
 
     filtered_page_id_titles = list(
         filter(
-            lambda page_id_title: page_id_title in page_views
+            lambda page_id_title: page_id_title[1] in page_views
             and page_views[page_id_title[1]] > PAGE_VIEW_THRESHOLD,
             page_id_titles,
         )
