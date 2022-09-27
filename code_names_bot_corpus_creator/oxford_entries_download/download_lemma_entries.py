@@ -60,7 +60,7 @@ def main():
         ),
         cache=OxfordCache(),
         process_result=process_result,
-        download_rate=1  # Oxford API limits usage to 1 request / second
+        download_rate=1,  # Oxford API limits usage to 1 request / second
     )
 
 
