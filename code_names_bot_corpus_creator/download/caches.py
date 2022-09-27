@@ -1,5 +1,9 @@
 from .cache import Cache
-from config import OXFORD_DEFINITIONS_CACHE, OXFORD_SENTENCES_CACHE, WIKI_PAGE_VIEWS_CACHE
+from config import (
+    OXFORD_DEFINITIONS_CACHE,
+    OXFORD_SENTENCES_CACHE,
+    WIKI_PAGE_VIEWS_CACHE,
+)
 
 
 class OxfordDefinitionsCache(Cache):

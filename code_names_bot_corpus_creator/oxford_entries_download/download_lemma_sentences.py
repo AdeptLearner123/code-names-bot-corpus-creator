@@ -4,7 +4,9 @@ from code_names_bot_corpus_creator.download.caches import OxfordSentencesCache
 from config import FILTERED_LEMMAS, MISSING_SENTENCES
 from credentials import OXFORD_APP_ID, OXFORD_APP_KEY
 
-GET_URL = lambda lemma: f"https://od-api.oxforddictionaries.com/api/v2/sentences/en/{lemma}?strictMatch=false"
+GET_URL = (
+    lambda lemma: f"https://od-api.oxforddictionaries.com/api/v2/sentences/en/{lemma}?strictMatch=false"
+)
 CHUNK_SIZE = 5
 
 
@@ -14,8 +16,8 @@ def get_request_params(lemma):
         "headers": {
             "Accept": "application/json",
             "app_id": OXFORD_APP_ID,
-            "app_key": OXFORD_APP_KEY
-        }
+            "app_key": OXFORD_APP_KEY,
+        },
     }
 
 
@@ -44,7 +46,7 @@ def main():
         lemmas = list(
             map(lambda lemma_region: lemma_region.split("|")[0], lemma_regions)
         )
-    
+
     with open(MISSING_SENTENCES, "r") as file:
         missing_sentences = set(file.read().splitlines())
         lemmas = list(filter(lambda lemma: lemma not in missing_sentences, lemmas))
