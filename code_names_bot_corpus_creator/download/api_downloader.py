@@ -61,7 +61,9 @@ def download(
                 break
 
             chunk_time_elapsed = time.time() - chunk_start_time
-            time.sleep(chunk_size / download_rate - chunk_time_elapsed)
+            sleep_time = chunk_size / download_rate - chunk_time_elapsed
+            if sleep_time > 0:
+                time.sleep(chunk_size / download_rate - chunk_time_elapsed)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
