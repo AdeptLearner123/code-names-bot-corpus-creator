@@ -3,19 +3,17 @@ import time
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from .cache import Cache
-
 
 def download(
     keys,
     get_request_params,
     cache,
-    process_result=None,
-    chunk_size=20,
-    download_rate=200,
+    process_result,
+    chunk_size,
+    download_rate,
 ):
     cached_keys = set(cache.get_cached_keys())
-    target_keys = list(set(keys).difference(cached_keys))
+    target_keys = list(filter(lambda key: key not in cached_keys, keys))
 
     print("Total keys: ", len(keys), "Target keys: ", len(target_keys))
 
