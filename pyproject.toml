@@ -22,7 +22,7 @@ pytest = "^5.2"
 format                          = "tasks:format"
 
 get-word-freq                   = "tools.get_word_freq:main"
-get-wiki-page-views             = "tools.get_wiki_page_views:main"
+get-dump-wiki-page-views             = "tools.get_wiki_page_views:main"
 get-cached-words-result         = "tools.get_cached_words_result:main"
 estimate-download-cost          = "tools.estimate_download_cost:main"
 
