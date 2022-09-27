@@ -36,6 +36,7 @@ download-lemma-sentences        = "code_names_bot_corpus_creator.oxford_entries_
 download-dump-wiki-page-views   = "code_names_bot_corpus_creator.wiki_page_views_download.download_dump_wiki_page_views:main"
 create-filtered-wiki-pages-list = "code_names_bot_corpus_creator.wiki_page_views_download.create_filtered_wiki_pages_list:main"
 download-api-wiki-page-views    = "code_names_bot_corpus_creator.wiki_page_views_download.download_api_wiki_page_views:main"
+download_wiki_redirects_categories  = "code_names_bot_corpus_creator.wiki_page_views_download.download_wiki_redirects_categories:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

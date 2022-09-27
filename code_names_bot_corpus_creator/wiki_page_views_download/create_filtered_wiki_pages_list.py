@@ -15,7 +15,7 @@ def main():
         page_id_titles = map(
             lambda page_id_title: page_id_title.split("\t"), page_id_titles
         )
-    
+
     filtered_by_dump_page_views = filter(
         lambda page_id_title: page_id_title[1] in page_views
         and page_views[page_id_title[1]] > PAGE_VIEW_THRESHOLD,
@@ -23,7 +23,8 @@ def main():
     )
 
     filtered_non_lists = filter(
-        lambda page_id_title: not page_id_title[1].startswith("List_of_"), filtered_by_dump_page_views
+        lambda page_id_title: not page_id_title[1].startswith("List_of_"),
+        filtered_by_dump_page_views,
     )
 
     filtered_page_id_titles = list(
