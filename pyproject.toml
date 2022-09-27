@@ -32,8 +32,8 @@ compile-oxford-lemmas           = "code_names_bot_corpus_creator.oxford_scraper.
 create-filtered-lemmas-list     = "code_names_bot_corpus_creator.oxford_entries_download.create_filtered_lemmas_list:main"
 download-lemma-entries          = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_entries:main"
 
-
-download-wiki-page-views        = "code_names_bot_corpus_creator.wiki_page_views_download.download_wiki_page_views:main"
+download-dump-wiki-page-views   = "code_names_bot_corpus_creator.wiki_page_views_download.download_dump_wiki_page_views:main"
+download-api-wiki-page-views    = "code_names_bot_corpus_creator.wiki_page_views_download.download_api_wiki_page_views:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
