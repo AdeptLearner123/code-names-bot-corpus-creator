@@ -1,6 +1,7 @@
 from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategoriesCache
 from code_names_bot_corpus_creator.download.api_downloader import download
 from config import FILTERED_WIKI_PAGES
+import json
 
 GET_URL = (
     lambda page_title: f"https://en.wikipedia.org/w/api.php?action=query&titles={page_title}&prop=redirects|categories&format=json"
@@ -21,7 +22,7 @@ def process_result(key, result):
         print("Invalid status code", key, result.text)
         return None, False
 
-    return result.json(), True
+    return json.dumps(result.json()), True
 
 
 def main():
