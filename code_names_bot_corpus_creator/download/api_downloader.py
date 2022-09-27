@@ -23,6 +23,7 @@ def download(
         for i in range(0, len(target_keys), chunk_size):
             target_chunk = target_keys[i : i + chunk_size]
             results = dict()
+            chunk_start_time = time.time()
 
             with ThreadPoolExecutor(max_workers=len(target_chunk)) as ex:
                 futures = [
@@ -59,7 +60,8 @@ def download(
                 print("Chunk Failed", chunk_failed)
                 break
 
-            time.sleep(chunk_size / download_rate)
+            chunk_time_elapsed = time.time() - chunk_start_time
+            time.sleep(chunk_size / download_rate - chunk_time_elapsed)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
