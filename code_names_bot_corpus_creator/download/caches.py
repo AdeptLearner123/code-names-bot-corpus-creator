@@ -23,5 +23,5 @@ class OxfordSentencesCache(Cache):
 
 
 class WikiRedirectsCategoriesCache(Cache):
-    def __init(self):
+    def __init__(self):
         super().__init__(WIKI_REDIRECTS_CATEGORIES_CACHE, False)
