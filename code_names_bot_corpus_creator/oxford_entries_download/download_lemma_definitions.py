@@ -1,7 +1,6 @@
-import chunk
 import json
 from code_names_bot_corpus_creator.download.api_downloader import download
-from code_names_bot_corpus_creator.download.caches import OxfordCache
+from code_names_bot_corpus_creator.download.caches import OxfordDefinitionsCache
 from config import FILTERED_LEMMAS, MISSING_US_LEMMAS
 from credentials import OXFORD_APP_ID, OXFORD_APP_KEY
 
@@ -59,7 +58,7 @@ def main():
         get_request_params=lambda lemma: get_request_params(
             lemma, lemma_to_region[lemma]
         ),
-        cache=OxfordCache(),
+        cache=OxfordDefinitionsCache(),
         process_result=process_result,
         chunk_size=5,
         download_rate=1,  # Oxford API limits usage to 1 request / second

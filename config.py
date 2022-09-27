@@ -1,8 +1,10 @@
-OXFORD_CACHE = "data/caches/oxford_cache.sqlite"
+OXFORD_SENTENCES_CACHE = "data/caches/oxford_sentences_cache.sqlite"
+OXFORD_DEFINITIONS_CACHE = "data/caches/oxford_definitions_cache.sqlite"
 WIKI_PAGE_VIEWS_CACHE = "data/caches/wiki_page_views_cache.sqlite"
 
 FILTERED_LEMMAS = "data/oxford_entries_download/filtered_lemmas.txt"
 MISSING_US_LEMMAS = "data/oxford_entries_download/missing_us_lemmas.txt"
+MISSING_SENTENCES = "data/oxford_entries_download/missing_sentences.txt"
 
 WIKI_PAGES = "data/wiki_pages/wiki_pages.txt"
 

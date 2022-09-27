@@ -30,7 +30,8 @@ scrape-oxford-lemmas            = "code_names_bot_corpus_creator.oxford_scraper.
 compile-oxford-lemmas           = "code_names_bot_corpus_creator.oxford_scraper.compile_lemmas:main"
 
 create-filtered-lemmas-list     = "code_names_bot_corpus_creator.oxford_entries_download.create_filtered_lemmas_list:main"
-download-lemma-entries          = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_entries:main"
+download-lemma-entries          = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_definitions:main"
+download-lemma-sentences        = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_sentences:main"
 
 download-dump-wiki-page-views   = "code_names_bot_corpus_creator.wiki_page_views_download.download_dump_wiki_page_views:main"
 filter-by-dump-page-views       = "code_names_bot_corpus_creator.wiki_page_views_download.filter_by_dump_page_views:main"
