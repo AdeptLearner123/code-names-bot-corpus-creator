@@ -29,6 +29,8 @@ def main():
         lambda _, title: not title.startswith("List_of_"), filtered_by_dump_page_views
     )
 
+    print(list(filtered_non_lists)[0])
+
     filtered_page_id_titles = list(
         map(lambda page_id, title: f"{page_id}\t{title}", filtered_non_lists)
     )
