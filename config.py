@@ -10,7 +10,7 @@ WIKI_PAGES = "data/wiki_pages/wiki_pages.txt"
 
 WIKI_PAGE_VIEWS_DUMP_DIR = "data/wiki_page_views_download/dumps"
 DUMP_WIKI_PAGE_VIEWS = "data/wiki_page_views_download/dump_wiki_page_views.txt"
-DUMP_PAGE_VIEW_FILTERED = "data/wiki_page_views_download/dump_page_view_filtered.txt"
+FILTERED_WIKI_PAGES = "data/wiki_page_views_download/filtered_wiki_pages.txt"
 MISSING_WIKI_PAGE_VIEWS = "data/wiki_page_views_download/missing_wiki_page_views.txt"
 
 SCRAPED_LEMMAS_US_DIR = "data/oxford_scraper/lemmas_us"
