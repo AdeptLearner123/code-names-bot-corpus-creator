@@ -7,7 +7,8 @@ MISSING_US_LEMMAS = "data/oxford_entries_download/missing_us_lemmas.txt"
 WIKI_PAGES = "data/wiki_pages/wiki_pages.txt"
 
 WIKI_PAGE_VIEWS_DUMP_DIR = "data/wiki_page_views_download/dumps"
-WIKI_PAGE_VIEWS = "data/wiki_page_views_download/dump_wiki_page_views.txt"
+DUMP_WIKI_PAGE_VIEWS = "data/wiki_page_views_download/dump_wiki_page_views.txt"
+DUMP_PAGE_VIEW_FILTERED = "data/wiki_page_views_download/dump_page_view_filtered.txt"
 MISSING_WIKI_PAGE_VIEWS = "data/wiki_page_views_download/missing_wiki_page_views.txt"
 
 SCRAPED_LEMMAS_US_DIR = "data/oxford_scraper/lemmas_us"

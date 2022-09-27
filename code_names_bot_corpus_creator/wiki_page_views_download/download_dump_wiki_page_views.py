@@ -2,7 +2,7 @@ import os
 import subprocess
 import time
 from tqdm import tqdm
-from config import WIKI_PAGE_VIEWS, WIKI_PAGE_VIEWS_DUMP_DIR
+from config import DUMP_WIKI_PAGE_VIEWS, WIKI_PAGE_VIEWS_DUMP_DIR
 from collections import Counter
 from calendar import monthrange
 
@@ -80,7 +80,7 @@ def main():
     for timestamp in tqdm(timestamps):
         page_views.update(parse_page_views(timestamp))
     
-    with open(WIKI_PAGE_VIEWS, "w+") as file:
+    with open(DUMP_WIKI_PAGE_VIEWS, "w+") as file:
         file.write("\n".join(list(map(lambda item: item[0] + " " + str(item[1]), page_views.items()))))
     
     print("--- %s seconds ---" % (time.time() - start_time))
