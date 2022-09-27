@@ -34,7 +34,7 @@ download-lemma-entries          = "code_names_bot_corpus_creator.oxford_entries_
 download-lemma-sentences        = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_sentences:main"
 
 download-dump-wiki-page-views   = "code_names_bot_corpus_creator.wiki_page_views_download.download_dump_wiki_page_views:main"
-filter-by-dump-page-views       = "code_names_bot_corpus_creator.wiki_page_views_download.filter_by_dump_page_views:main"
+create-filtered-wiki-pages-list = "code_names_bot_corpus_creator.wiki_page_views_download.create_filtered_wiki_pages_list:main"
 download-api-wiki-page-views    = "code_names_bot_corpus_creator.wiki_page_views_download.download_api_wiki_page_views:main"
 
 [build-system]
