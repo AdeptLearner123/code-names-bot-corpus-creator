@@ -23,17 +23,15 @@ format                          = "tasks:format"
 
 get-word-freq                   = "tools.get_word_freq:main"
 get-wiki-page-views             = "tools.get_wiki_page_views:main"
-get-cached-result               = "tools.get_cached_words_result:main"
+get-cached-words-result         = "tools.get_cached_words_result:main"
 estimate-download-cost          = "tools.estimate_download_cost:main"
 
 scrape-oxford-lemmas            = "code_names_bot_corpus_creator.oxford_scraper.scrape_oxford_lemmas:main"
 compile-oxford-lemmas           = "code_names_bot_corpus_creator.oxford_scraper.compile_lemmas:main"
 
 create-filtered-lemmas-list     = "code_names_bot_corpus_creator.oxford_entries_download.create_filtered_lemmas_list:main"
-setup-oxford-cache              = "code_names_bot_corpus_creator.oxford_entries_download.setup_oxford_cache:main"
 download-lemma-entries          = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_entries:main"
 
-setup-page-views-cache          = "code_names_bot_corpus_creator.wiki_page_views_download.setup_page_views_cache:main"
 
 download-wiki-page-views        = "code_names_bot_corpus_creator.wiki_page_views_download.wiki_page_views_downloader:main"
 

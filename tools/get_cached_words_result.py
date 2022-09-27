@@ -1,13 +1,13 @@
 import json
 import sys
 
-from code_names_bot_corpus_creator.caches.oxford_cache import OxfordCache
+from code_names_bot_corpus_creator.download.caches import OxfordCache
 
 
 def main():
     query = sys.argv[1]
     oxford_cache = OxfordCache()
-    result = oxford_cache.get_cached_word_result(query)
+    result = oxford_cache.get_cached_value(query)
 
     print(json.dumps(result, indent=4))
 

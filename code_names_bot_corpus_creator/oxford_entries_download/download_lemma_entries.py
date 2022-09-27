@@ -1,18 +1,7 @@
 import json
-import os
-import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
-
-import requests
-from tqdm import tqdm
-
-from code_names_bot_corpus_creator.caches.oxford_cache import OxfordCache
-from config import (
-    FILTERED_LEMMAS,
-    MISSING_US_LEMMAS,
-    SCRAPED_LEMMAS_US_DIR,
-    SCRAPED_LEMMAS_WORLD_DIR,
-)
+from code_names_bot_corpus_creator.download.api_downloader import download
+from code_names_bot_corpus_creator.download.caches import OxfordCache
+from config import FILTERED_LEMMAS, MISSING_US_LEMMAS
 from credentials import OXFORD_APP_ID, OXFORD_APP_KEY
 
 GET_URL = (
@@ -20,82 +9,32 @@ GET_URL = (
 )
 CHUNK_SIZE = 5
 
-oxford_cache = OxfordCache()
+
+def get_request_params(lemma, is_us):
+    return {
+        "url": GET_URL(is_us),
+        "headers": {"app_id": OXFORD_APP_ID, "app_key": OXFORD_APP_KEY},
+        "params": {"q": lemma},
+    }
 
 
-def download(lemmas, lemma_to_region):
-    start_time = time.time()
+def process_result(key, result):
+    if result.status_code == 404 and "error" in result.json():
+        print("Lemma not in US dict", key, result.json())
+        with open(MISSING_US_LEMMAS, "a") as file:
+            file.write(key + "\n")
+        return None, True
 
-    with tqdm(total=len(lemmas)) as pbar:
-        for i in range(0, len(lemmas), CHUNK_SIZE):
-            target_chunk = lemmas[i : i + CHUNK_SIZE]
-            results = dict()
+    if result.status_code != 200:
+        print(
+            "Invalid status code for",
+            key,
+            result.status_code,
+            result.text,
+        )
+        return None, False
 
-            print("Target ids", len(target_chunk))
-            with ThreadPoolExecutor(max_workers=len(target_chunk)) as ex:
-                futures = [
-                    ex.submit(
-                        get_lemma_entry,
-                        GET_URL(lemma_to_region[lemma]),
-                        lemma,
-                        results,
-                    )
-                    for lemma in target_chunk
-                ]
-                for _ in as_completed(futures):
-                    pbar.update(1)
-
-            chunk_failed = 0
-            missing_us_lemmas = []
-            for lemma in target_chunk:
-                if lemma not in results:
-                    print("Lemma not in results", lemma)
-                    chunk_failed += 1
-                    continue
-
-                if (
-                    results[lemma].status_code == 404
-                    and "error" in results[lemma].json()
-                ):
-                    print("Lemma not in US dict", lemma, results[lemma].json())
-                    missing_us_lemmas.append(lemma)
-                    continue
-
-                if results[lemma].status_code != 200:
-                    print(
-                        "Invalid status code for",
-                        lemma,
-                        results[lemma].status_code,
-                        results[lemma].text,
-                    )
-                    chunk_failed += 1
-                    continue
-
-                oxford_cache.cache_words_result(
-                    lemma, json.dumps(results[lemma].json())
-                )
-
-            oxford_cache.commit()
-            with open(MISSING_US_LEMMAS, "a") as file:
-                file.write("\n".join(missing_us_lemmas))
-
-            if chunk_failed > 0:
-                print("Chunk Failed", chunk_failed)
-                break
-
-            time.sleep(CHUNK_SIZE)
-
-    oxford_cache.commit()
-    print("--- %s seconds ---" % (time.time() - start_time))
-
-
-def get_lemma_entry(url, lemma, results):
-    r = requests.get(
-        url,
-        headers={"app_id": OXFORD_APP_ID, "app_key": OXFORD_APP_KEY},
-        params={"q": lemma},
-    )
-    results[lemma] = r
+    return json.dumps(result.json()), True
 
 
 def main():
@@ -109,13 +48,20 @@ def main():
         }
         lemmas = lemma_to_region.keys()
 
-    cached_lemmas = oxford_cache.get_all_cached()
-    uncached_lemmas = list(set(lemmas).difference(set(cached_lemmas)))
+    with open(MISSING_US_LEMMAS, "r") as file:
+        missing_us_lemmas = set(file.read().splitlines())
+        for lemma in missing_us_lemmas:
+            lemma_to_region[lemma] = False
 
-    print("Lemmas", len(lemmas))
-    print("Uncached lemmas", len(uncached_lemmas))
-
-    download(uncached_lemmas, lemma_to_region)
+    download(
+        keys=lemmas,
+        get_request_params=lambda lemma: get_request_params(
+            lemma, lemma_to_region[lemma]
+        ),
+        cache=OxfordCache(),
+        process_result=process_result,
+        download_rate=1  # Oxford API limits usage to 1 request / second
+    )
 
 
 if __name__ == "__main__":
