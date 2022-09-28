@@ -4,7 +4,7 @@ from wordfreq import word_frequency
 
 from config import FILTERED_LEMMAS, ALL_LEMMAS
 
-FREQUENCY_THRESHOLD = 1e-6
+FREQUENCY_THRESHOLD = 4.8e-7
 
 
 def main():
