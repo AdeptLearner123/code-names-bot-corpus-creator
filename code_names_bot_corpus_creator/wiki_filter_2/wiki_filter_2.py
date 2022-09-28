@@ -35,7 +35,8 @@ def main():
     cache = WikiRedirectsCategoriesCache()
     title_to_json = cache.get_key_to_value()
     for title in title_to_json:
-        title_to_json[title] = json.loads(title_to_json[title])
+        json = json.loads(title_to_json[title])
+        title_to_json[title] = list(json["query"]["pages"].values())[0]
 
         if "categories" not in title_to_json[title]:
             print("Missing categories", title)
