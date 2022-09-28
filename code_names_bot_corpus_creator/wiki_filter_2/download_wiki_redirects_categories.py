@@ -2,9 +2,10 @@ from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategorie
 from code_names_bot_corpus_creator.download.api_downloader import download
 from config import WIKI_FILTERED_1
 import json
+from urllib.parse import quote_plus
 
 GET_URL = (
-    lambda page_title: f"https://en.wikipedia.org/w/api.php?action=query&titles={page_title}&prop=redirects|categories&format=json"
+    lambda page_title: f"https://en.wikipedia.org/w/api.php?action=query&titles={quote_plus(page_title)}&prop=redirects|categories&format=json"
 )
 
 
