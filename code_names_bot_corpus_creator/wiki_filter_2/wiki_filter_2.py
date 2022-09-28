@@ -29,6 +29,7 @@ def main():
         page_id_titles = map(
             lambda page_id_title: page_id_title.split("\t"), page_id_titles
         )
+        print("Page id titles", len(list(page_id_titles)))
         title_to_page_id = { page_id_title[1]: page_id_title[0] for page_id_title in page_id_titles}
         print("Page id titles", len(list(page_id_titles)))
         titles = [ page_id_title[1] for page_id_title in page_id_titles ]
