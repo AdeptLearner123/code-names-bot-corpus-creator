@@ -37,6 +37,9 @@ def main():
     for title in title_to_json:
         title_to_json[title] = json.loads(title_to_json[title])
 
+        if "categories" not in title_to_json[title]:
+            print("Missing categories", title)
+
     titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
     titles = filter(lambda title: has_single_word_title(title_to_json[title]), titles)
     title_to_redirects = { title: get_redirect_titles(title) for title in titles}
