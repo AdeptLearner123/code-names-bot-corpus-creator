@@ -34,8 +34,11 @@ def main():
     cache = WikiRedirectsCategoriesCache()
     title_to_json = cache.get_key_to_value()
 
+    print("Titles", len(titles))
     titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
+    print("Titles", len(titles))
     titles = filter(lambda title: has_single_word_title(title_to_json[title]), titles)
+    print("Titles", len(titles))
     title_to_redirects = { title: get_redirect_titles(title) for title in titles}
 
     with open(WIKI_FILTERED_2, "w+") as file:
