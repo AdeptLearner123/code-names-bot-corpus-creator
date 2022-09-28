@@ -45,5 +45,8 @@ class Cache:
         rows = self.cur.fetchall()
         return { row[0]: row[1] for row in rows }
 
+    def delete_key(self, key):
+        self.cur.execute("DELETE FROM cache WHERE key=?", [key])
+
     def commit(self):
         self.con.commit()
