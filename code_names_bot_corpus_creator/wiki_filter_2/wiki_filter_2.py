@@ -1,4 +1,4 @@
-from download.caches import WikiRedirectsCategoriesCache
+from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategoriesCache
 from config import WIKI_FILTERED_1, WIKI_FILTERED_2
 
 
