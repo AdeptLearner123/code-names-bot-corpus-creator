@@ -36,10 +36,11 @@ def main():
     title_to_json = cache.get_key_to_value()
     for title in title_to_json:
         result_json = json.loads(title_to_json[title])
-        title_to_json[title] = list(result_json["query"]["pages"].values())[0]
-
+        
         if "query" not in result_json:
             print("Missing query", title)
+        
+        title_to_json[title] = list(result_json["query"]["pages"].values())[0]
         
         if "categories" not in title_to_json[title]:
             print("Missing categories", title)
