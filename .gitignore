@@ -2,3 +2,7 @@ __pycache__/
 .DS_Store
 credentials.py
 *.sqlite
+
+/data/wiki_pages/wiki_pages.txt
+/data/wiki_filter_1/dump_wiki_page_views.txt
+/data/wiki_filter_1/dumps/

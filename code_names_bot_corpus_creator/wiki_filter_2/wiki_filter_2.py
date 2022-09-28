@@ -44,10 +44,14 @@ def main():
         
         if "categories" not in title_to_json[title]:
             print("Missing categories", title)
+        
+        if "redirects" not in title_to_json[title]:
+            print("Missing redirects", title)
+
 
     titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
     titles = filter(lambda title: has_single_word_title(title_to_json[title]), titles)
-    title_to_redirects = { title: get_redirect_titles(title) for title in titles}
+    title_to_redirects = { title: get_redirect_titles(title_to_json[title]) for title in titles}
 
     with open(WIKI_FILTERED_2, "w+") as file:
         lines = list(map(lambda title: f"{title_to_page_id[title]}\t{title}\t{'|'.join(title_to_redirects[title])}", titles))
