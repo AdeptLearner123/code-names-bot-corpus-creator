@@ -1,4 +1,4 @@
-from config import DUMP_WIKI_PAGE_VIEWS, WIKI_PAGES, FILTERED_WIKI_PAGES
+from config import DUMP_WIKI_PAGE_VIEWS, WIKI_PAGES, WIKI_FILTERED_1
 
 
 PAGE_VIEW_THRESHOLD = 8000
@@ -31,7 +31,7 @@ def main():
         map(lambda page_id_title: "\t".join(page_id_title), filtered_non_lists)
     )
 
-    with open(FILTERED_WIKI_PAGES, "w+") as file:
+    with open(WIKI_FILTERED_1, "w+") as file:
         file.write("\n".join(filtered_page_id_titles))
 
 

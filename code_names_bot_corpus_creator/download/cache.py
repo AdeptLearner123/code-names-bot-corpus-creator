@@ -40,5 +40,10 @@ class Cache:
         rows = self.cur.fetchall()
         return [row[0] for row in rows]
 
+    def get_key_to_value(self):
+        self.cur.execute("SELECT key, value FROM cache;")
+        rows = self.cur.fetchall()
+        return { row[0]: row[1] for row in rows }
+
     def commit(self):
         self.con.commit()

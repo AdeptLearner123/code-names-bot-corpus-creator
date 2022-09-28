@@ -1,6 +1,6 @@
 from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategoriesCache
 from code_names_bot_corpus_creator.download.api_downloader import download
-from config import FILTERED_WIKI_PAGES
+from config import WIKI_FILTERED_1
 import json
 
 GET_URL = (
@@ -26,7 +26,7 @@ def process_result(key, result):
 
 
 def main():
-    with open(FILTERED_WIKI_PAGES, "r") as file:
+    with open(WIKI_FILTERED_1, "r") as file:
         page_id_titles = file.read().splitlines()
         page_id_titles = map(
             lambda page_id_title: page_id_title.split("\t"), page_id_titles
