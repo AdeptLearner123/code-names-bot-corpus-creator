@@ -6,16 +6,18 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def download(
     keys,
-    get_request_params,
     cache,
     process_result,
     chunk_size,
     download_rate,
+    get_request_params = None,
+    make_request = None,
 ):
     cached_keys = set(cache.get_cached_keys())
     target_keys = list(filter(lambda key: key not in cached_keys, keys))
-
     print("Total keys: ", len(keys), "Target keys: ", len(target_keys))
+
+    download_result = get_download_func(make_request, get_request_params)
 
     start_time = time.time()
 
@@ -30,7 +32,6 @@ def download(
                     ex.submit(
                         download_result,
                         key,
-                        get_request_params(key),
                         results,
                     )
                     for key in target_chunk
@@ -68,6 +69,14 @@ def download(
     print("--- %s seconds ---" % (time.time() - start_time))
 
 
-def download_result(key, request_params, results):
-    r = requests.get(**request_params)
-    results[key] = r
+def get_download_func(make_request, get_request_params):
+    if make_request is None:
+        def download_result(key, results):
+            request_params = get_request_params(key)
+            r = requests.get(**request_params)
+            results[key] = r
+    else:
+        def download_result(key, results):
+            results[key] = make_request(key)
+
+    return download_result
