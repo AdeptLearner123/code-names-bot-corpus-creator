@@ -31,7 +31,7 @@ def main():
         title_to_page_id = { page_id_title[1]: page_id_title[0] for page_id_title in page_id_titles}
         titles = [ page_id_title[1] for page_id_title in page_id_titles ]
     
-    cache = WikiRedirectsCategoriesCache
+    cache = WikiRedirectsCategoriesCache()
     title_to_json = cache.get_key_to_value()
 
     titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
