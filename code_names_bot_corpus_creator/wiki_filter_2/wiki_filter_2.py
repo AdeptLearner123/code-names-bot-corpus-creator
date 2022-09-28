@@ -39,7 +39,7 @@ def main():
     title_to_redirects = { title: get_redirect_titles(title) for title in titles}
 
     with open(WIKI_FILTERED_2, "w+") as file:
-        lines = list(map(lambda title: f"{title_to_page_id[title]}\t{title}\t{'|'.join(title_to_redirects[title])}"))
+        lines = list(map(lambda title: f"{title_to_page_id[title]}\t{title}\t{'|'.join(title_to_redirects[title])}", titles))
         file.write("\n".join(lines))
 
 
