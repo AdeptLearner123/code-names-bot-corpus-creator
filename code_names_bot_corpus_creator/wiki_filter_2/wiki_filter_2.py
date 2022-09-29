@@ -3,24 +3,28 @@ from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategorie
 from config import WIKI_FILTERED_1, WIKI_FILTERED_2
 
 
-def is_disambiguation(json):
-    for category in json["categories"]:
-        if category["title"] == "Category:Disambiguation pages":
-            return True
+def is_disambiguation(results):
+    for result in results:
+        page_result = list(result["query"]["pages"].values())[0]
+        for category in page_result["categories"]:
+            if category["title"] == "Category:Disambiguation pages":
+                return True
     
     return False
 
 
-def has_single_word_title(json):
-    for redirect in json["redirects"]:
-        redirect_title = redirect["title"].split(" (")[0]
-        if len(redirect_title.split(" ")) == 1:
-            return True
-    return False
+def has_single_word_title(redirects):
+    return any(redirect.split(" ") == 1 for redirect in redirects)
 
 
-def get_redirect_titles(json):
-    return [redirect["title"] for redirect in json["redirects"]]
+def get_redirect_titles(results):
+    redirects = []
+    for result in results:
+        page_result = list(result["query"]["pages"].values())[0]
+        for redirect in page_result["redirects"]:
+            redirect_title = redirect["title"].split(" (")[0]
+            redirects.append(redirect_title)
+    return redirects
 
 
 def main():
@@ -33,25 +37,15 @@ def main():
         titles = [ page_id_title[1] for page_id_title in page_id_titles ]
     
     cache = WikiRedirectsCategoriesCache()
+
     title_to_json = cache.get_key_to_value()
     for title in title_to_json:
-        result_json = json.loads(title_to_json[title])
-        
-        if "query" not in result_json:
-            print("Missing query", title)
-        
-        title_to_json[title] = list(result_json["query"]["pages"].values())[0]
-        
-        if "categories" not in title_to_json[title]:
-            print("Missing categories", title)
-        
-        if "redirects" not in title_to_json[title]:
-            print("Missing redirects", title)
+        title_to_json[title] = json.loads(title_to_json[title])
 
+    title_to_redirects = { title: get_redirect_titles(title_to_json[title]) for title in titles }
 
     titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
-    titles = filter(lambda title: has_single_word_title(title_to_json[title]), titles)
-    title_to_redirects = { title: get_redirect_titles(title_to_json[title]) for title in titles}
+    titles = filter(lambda title: has_single_word_title(title_to_redirects[title]), titles)
 
     with open(WIKI_FILTERED_2, "w+") as file:
         lines = list(map(lambda title: f"{title_to_page_id[title]}\t{title}\t{'|'.join(title_to_redirects[title])}", titles))
