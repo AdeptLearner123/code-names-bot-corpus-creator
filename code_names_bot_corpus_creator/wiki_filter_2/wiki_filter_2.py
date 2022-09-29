@@ -9,7 +9,7 @@ def is_disambiguation(results):
 
         if "categories" in page_result:
             if any(
-                category["title"] == "Category:Disambiguation pages"
+                category["title"] == "Category:All disambiguation pages"
                 for category in page_result["categories"]
             ):
                 return True
