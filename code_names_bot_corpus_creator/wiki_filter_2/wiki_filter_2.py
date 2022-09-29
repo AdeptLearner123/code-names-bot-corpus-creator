@@ -3,7 +3,7 @@ from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategorie
 from config import WIKI_FILTERED_1, WIKI_FILTERED_2
 
 
-UNWANTED_CATEGORIES = set(["Category:All_set_index_articles", "Category:All disambiguation pages"])
+UNWANTED_CATEGORIES = set(["Category:All set index articles", "Category:All disambiguation pages"])
 
 
 def is_disambiguation(results):
