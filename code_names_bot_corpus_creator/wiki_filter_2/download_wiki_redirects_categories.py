@@ -5,9 +5,7 @@ import json
 import requests
 from urllib.parse import urlencode
 
-GET_URL = (
-    lambda params: f"https://en.wikipedia.org/w/api.php?{urlencode(params)}"
-)
+GET_URL = lambda params: f"https://en.wikipedia.org/w/api.php?{urlencode(params)}"
 
 
 def make_request(page_title, continue_params=None):
@@ -15,17 +13,17 @@ def make_request(page_title, continue_params=None):
         "action": "query",
         "titles": page_title,
         "prop": "redirects|categories",
-        "format": "json"
+        "format": "json",
     }
 
     if continue_params is not None:
         params.update(continue_params)
 
     r = requests.get(
-        url = GET_URL(params),
-        headers = {
+        url=GET_URL(params),
+        headers={
             "User-Agent": "CodeNamesBot/0.0 (nalu.zou@gmail.com) python-requests/0.0"
-        }
+        },
     )
 
     return r
@@ -35,7 +33,7 @@ def validate_response(page_title, response):
     if response.status_code != 200:
         print("Invalid status code", page_title, response.text)
         return False
-   
+
     return True
 
 
@@ -43,8 +41,8 @@ def fetch_all_responses(page_title):
     response = make_request(page_title)
 
     if not validate_response(page_title, response):
-       return page_title, None
-    
+        return page_title, None
+
     responses = [response.json()]
 
     while "continue" in response.json():
@@ -52,20 +50,20 @@ def fetch_all_responses(page_title):
 
         if not validate_response(page_title, response):
             return page_title, None
-        
+
         responses.append(response.json())
-    
+
     return page_title, responses
 
 
 def process_result(key, result):
-    if (result is None):
+    if result is None:
         print("Failed", key)
         return None, False
 
     if list(result[0]["query"]["pages"].keys())[0] == "-1":
         print("Missing page", key)
-        
+
         with open(MISSING_REDIRECTS_CATEGORIES, "a") as file:
             file.write(key + "\n")
 

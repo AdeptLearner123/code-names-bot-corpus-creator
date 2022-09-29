@@ -10,8 +10,8 @@ def download(
     process_result,
     chunk_size,
     download_rate,
-    get_request_params = None,
-    make_request = None,
+    get_request_params=None,
+    make_request=None,
 ):
     cached_keys = set(cache.get_cached_keys())
     target_keys = list(filter(lambda key: key not in cached_keys, keys))

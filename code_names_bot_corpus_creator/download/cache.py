@@ -43,7 +43,7 @@ class Cache:
     def get_key_to_value(self):
         self.cur.execute("SELECT key, value FROM cache;")
         rows = self.cur.fetchall()
-        return { row[0]: row[1] for row in rows }
+        return {row[0]: row[1] for row in rows}
 
     def delete_key(self, key):
         self.cur.execute("DELETE FROM cache WHERE key=?", [key])
