@@ -17,7 +17,10 @@ def download(
     target_keys = list(filter(lambda key: key not in cached_keys, keys))
     print("Total keys: ", len(keys), "Target keys: ", len(target_keys))
 
-    download_result = get_download_func(make_request, get_request_params)
+    if make_request is None:
+        download_task = lambda key: requests.get(**get_request_params(key))
+    else:
+        download_task = make_request
 
     start_time = time.time()
 
@@ -30,13 +33,14 @@ def download(
             with ThreadPoolExecutor(max_workers=len(target_chunk)) as ex:
                 futures = [
                     ex.submit(
-                        download_result,
+                        download_task,
                         key,
-                        results,
                     )
                     for key in target_chunk
                 ]
-                for _ in as_completed(futures):
+                for future in as_completed(futures):
+                    key, result = future.result()
+                    results[key] = result
                     pbar.update(1)
 
             chunk_failed = 0
@@ -67,18 +71,3 @@ def download(
                 time.sleep(chunk_size / download_rate - chunk_time_elapsed)
 
     print("--- %s seconds ---" % (time.time() - start_time))
-
-
-def get_download_func(make_request, get_request_params):
-    if make_request is None:
-        def download_result(key, results):
-            request_params = get_request_params(key)
-            r = requests.get(**request_params)
-            results[key] = r
-    else:
-        def download_result(key, results):
-            print("Download func", key)
-            results[key] = make_request(key)
-            print("Finished", key in results)
-
-    return download_result
