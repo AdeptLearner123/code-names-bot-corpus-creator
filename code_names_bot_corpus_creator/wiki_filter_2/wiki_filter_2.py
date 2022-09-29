@@ -14,8 +14,8 @@ def is_disambiguation(results):
     return False
 
 
-def has_single_word_title(redirects):
-    return any(len(redirect.split(" ")) == 1 for redirect in redirects)
+def has_single_word_title_or_acronym(title, redirects):
+    return len(title.split(" ")) == 1 or any(len(redirect.split(" ")) == 1 and redirect.isupper() for redirect in redirects)
 
 
 def get_redirect_titles(results):
@@ -48,7 +48,7 @@ def main():
     
     titles = filter(lambda title: title in title_to_json, titles)
     titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
-    titles = filter(lambda title: has_single_word_title(title_to_redirects[title]), titles)
+    titles = filter(lambda title: has_single_word_title_or_acronym(title_to_redirects[title]), titles)
 
     with open(WIKI_FILTERED_2, "w+") as file:
         lines = list(map(lambda title: f"{title_to_page_id[title]}\t{title}\t{'|'.join(title_to_redirects[title])}", titles))
