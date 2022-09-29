@@ -3,13 +3,16 @@ from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategorie
 from config import WIKI_FILTERED_1, WIKI_FILTERED_2
 
 
+UNWANTED_CATEGORIES = set(["Category:All_set_index_articles", "Category:All disambiguation pages"])
+
+
 def is_disambiguation(results):
     for result in results:
         page_result = list(result["query"]["pages"].values())[0]
 
         if "categories" in page_result:
             if any(
-                category["title"] == "Category:All disambiguation pages"
+                category["title"] in UNWANTED_CATEGORIES
                 for category in page_result["categories"]
             ):
                 return True
