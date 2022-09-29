@@ -2,28 +2,67 @@ from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategorie
 from code_names_bot_corpus_creator.download.api_downloader import download
 from config import WIKI_FILTERED_1
 import json
-from urllib.parse import quote_plus
+import requests
+from urllib.parse import urlencode
 
 GET_URL = (
-    lambda page_title: f"https://en.wikipedia.org/w/api.php?action=query&titles={quote_plus(page_title)}&prop=redirects|categories&format=json"
+    lambda params: f"https://en.wikipedia.org/w/api.php?{urlencode(params)}"
 )
 
 
-def get_request_params(page_title):
-    return {
-        "url": GET_URL(page_title),
-        "headers": {
-            "User-Agent": "CodeNamesBot/0.0 (nalu.zou@gmail.com) python-requests/0.0"
-        },
+def make_request(page_title, continue_params=None):
+    params = {
+        "titles": page_title,
+        "prop": "redirects|categories",
+        "format": "json"
     }
+
+    if continue_params is not None:
+        params = params.update(continue_params)
+
+    r = requests.get(
+        url = GET_URL(params),
+        headers = {
+            "User-Agent": "CodeNamesBot/0.0 (nalu.zou@gmail.com) python-requests/0.0"
+        }
+    )
+
+    return r
+
+
+def validate_response(page_title, response):
+    if response.status_code != 200:
+        print("Invalid status code", page_title, response.text)
+        return False
+
+    if list(response.json()["query"]["pages"].keys())[0] == "-1":
+        print("Missing page", page_title, response.text)
+        return False
+    
+    return True
+
+
+def make_request(page_title):
+    response = make_request(page_title)
+
+    if not validate_response(response):
+        return None
+    
+    responses = [response.json()]
+
+    while "continue" in response.json():
+        response = make_request(page_title, response["continue"])
+
+        if not validate_response(response):
+            return None
+        
+        responses.append(response.json())
+    
+    return responses
 
 
 def process_result(key, result):
-    if result.status_code != 200:
-        print("Invalid status code", key, result.text)
-        return None, False
-
-    return json.dumps(result.json()), True
+    return result, result is not None
 
 
 def main():
@@ -36,7 +75,7 @@ def main():
 
     download(
         keys=page_titles,
-        get_request_params=get_request_params,
+        make_request=make_request,
         cache=WikiRedirectsCategoriesCache(),
         process_result=process_result,
         chunk_size=20,
