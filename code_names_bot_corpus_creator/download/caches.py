@@ -4,6 +4,7 @@ from config import (
     OXFORD_SENTENCES_CACHE,
     WIKI_PAGE_VIEWS_CACHE,
     WIKI_REDIRECTS_CATEGORIES_CACHE,
+    WIKI_SUMMARIES_CACHE,
 )
 
 
@@ -25,3 +26,8 @@ class OxfordSentencesCache(Cache):
 class WikiRedirectsCategoriesCache(Cache):
     def __init__(self):
         super().__init__(WIKI_REDIRECTS_CATEGORIES_CACHE, False)
+
+
+class WikiSummariesCache(Cache):
+    def __init__(self):
+        super().__inti__(WIKI_SUMMARIES_CACHE, False)

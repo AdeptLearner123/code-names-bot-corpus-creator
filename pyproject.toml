@@ -42,6 +42,8 @@ wiki-filter-2                   = "code_names_bot_corpus_creator.wiki_filter_2.w
 download-api-wiki-page-views    = "code_names_bot_corpus_creator.wiki_filter_3.download_api_wiki_page_views:main"
 wiki-filter-3                   = "code_names_bot_corpus_creator.wiki_filter_3.wiki_filter_3:main"
 
+download-wiki-summaries         = "code_names_bot_corpus_creator.wiki_summaries_download.download_wiki_summaries:main"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
