@@ -16,7 +16,7 @@ WIKI_FILTERED_1 = "data/wiki_filter_1/wiki_filtered_1.txt"
 MISSING_REDIRECTS_CATEGORIES = "data/wiki_filter_2/missing_redirects_categories.txt"
 WIKI_FILTERED_2 = "data/wiki_filter_2/wiki_filtered_2.txt"
 
-MISSING_WIKI_PAGE_VIEWS = "data/wiki_page_views_download/missing_wiki_page_views.txt"
+MISSING_WIKI_PAGE_VIEWS = "data/wiki_filter_3/missing_wiki_page_views.txt"
 
 SCRAPED_LEMMAS_US_DIR = "data/oxford_scraper/lemmas_us"
 SCRAPED_INDICES_US_DIR = "data/oxford_scraper/indices_us"
