@@ -49,6 +49,7 @@ def main():
 
     title_to_redirects = { title: get_redirect_titles(title_to_json[title]) for title in titles }
 
+    titles = filter(lambda title: title in title_to_json, titles)
     titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
     titles = filter(lambda title: has_single_word_title(title_to_redirects[title]), titles)
 
