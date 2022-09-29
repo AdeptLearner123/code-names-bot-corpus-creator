@@ -18,7 +18,7 @@ def download(
     print("Total keys: ", len(keys), "Target keys: ", len(target_keys))
 
     if make_request is None:
-        download_task = lambda key: requests.get(**get_request_params(key))
+        download_task = lambda key: (key, requests.get(**get_request_params(key)))
     else:
         download_task = make_request
 

@@ -1,6 +1,6 @@
 from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategoriesCache
 from code_names_bot_corpus_creator.download.api_downloader import download
-from config import WIKI_FILTERED_1
+from config import WIKI_FILTERED_1, MISSING_REDIRECTS_CATEGORIES
 import json
 import requests
 from urllib.parse import urlencode
@@ -12,13 +12,14 @@ GET_URL = (
 
 def make_request(page_title, continue_params=None):
     params = {
+        "action": "query",
         "titles": page_title,
         "prop": "redirects|categories",
         "format": "json"
     }
 
     if continue_params is not None:
-        params = params.update(continue_params)
+        params.update(continue_params)
 
     r = requests.get(
         url = GET_URL(params),
@@ -34,39 +35,43 @@ def validate_response(page_title, response):
     if response.status_code != 200:
         print("Invalid status code", page_title, response.text)
         return False
-
-    if list(response.json()["query"]["pages"].keys())[0] == "-1":
-        print("Missing page", page_title, response.text)
-        return False
-    
+   
     return True
 
 
 def fetch_all_responses(page_title):
-    print("Fetch all responses", page_title)
     response = make_request(page_title)
 
-    if not validate_response(response):
-        print("Returning None")
-        return None
+    if not validate_response(page_title, response):
+       return page_title, None
     
     responses = [response.json()]
 
     while "continue" in response.json():
-        print("Making continuation request")
-        response = make_request(page_title, response["continue"])
+        response = make_request(page_title, response.json()["continue"])
 
-        if not validate_response(response):
-            return None
+        if not validate_response(page_title, response):
+            return page_title, None
         
         responses.append(response.json())
     
-    print("Returning", len(responses))
-    return responses
+    return page_title, responses
 
 
 def process_result(key, result):
-    return result, result is not None
+    if (result is None):
+        print("Failed", key)
+        return None, False
+
+    if list(result[0]["query"]["pages"].keys())[0] == "-1":
+        print("Missing page", key)
+        
+        with open(MISSING_REDIRECTS_CATEGORIES, "a") as file:
+            file.write(key + "\n")
+
+        return None, True
+
+    return json.dumps(result), True
 
 
 def main():
@@ -77,7 +82,9 @@ def main():
         )
         page_titles = list(map(lambda page_id_title: page_id_title[1], page_id_titles))
 
-    page_titles = ["Hamas"]
+    with open(MISSING_REDIRECTS_CATEGORIES, "r") as file:
+        missing = set(file.read().splitlines())
+        page_titles = list(filter(lambda title: title not in missing, page_titles))
 
     download(
         keys=page_titles,
