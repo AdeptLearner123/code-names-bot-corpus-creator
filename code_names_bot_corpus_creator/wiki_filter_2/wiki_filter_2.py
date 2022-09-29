@@ -21,10 +21,7 @@ def get_redirect_titles(results):
     redirects = []
     for result in results:
         page_result = list(result["query"]["pages"].values())[0]
-
-        if "redirects" not in page_result:
-            print("Missing redirects", result)
-
+        
         if "redirects" in page_result:
             for redirect in page_result["redirects"]:
                 redirect_title = redirect["title"].split(" (")[0]
