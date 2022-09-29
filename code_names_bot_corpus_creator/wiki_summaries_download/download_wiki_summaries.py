@@ -5,7 +5,7 @@ from config import WIKI_FILTERED_3
 from urllib.parse import quote_plus
 
 GET_URL = (
-    lambda page_title: f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote_plus(page_title)}/monthly/2021010100/2021123100"
+    lambda page_title: f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote_plus(page_title)}"
 )
 
 
