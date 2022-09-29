@@ -30,4 +30,4 @@ class WikiRedirectsCategoriesCache(Cache):
 
 class WikiSummariesCache(Cache):
     def __init__(self):
-        super().__inti__(WIKI_SUMMARIES_CACHE, False)
+        super().__init__(WIKI_SUMMARIES_CACHE, False)
