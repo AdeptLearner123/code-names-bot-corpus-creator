@@ -77,6 +77,8 @@ def get_download_func(make_request, get_request_params):
             results[key] = r
     else:
         def download_result(key, results):
+            print("Download func", key)
             results[key] = make_request(key)
+            print("Finished", key in results)
 
     return download_result

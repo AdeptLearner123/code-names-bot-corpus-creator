@@ -42,15 +42,18 @@ def validate_response(page_title, response):
     return True
 
 
-def make_request(page_title):
+def fetch_all_responses(page_title):
+    print("Fetch all responses", page_title)
     response = make_request(page_title)
 
     if not validate_response(response):
+        print("Returning None")
         return None
     
     responses = [response.json()]
 
     while "continue" in response.json():
+        print("Making continuation request")
         response = make_request(page_title, response["continue"])
 
         if not validate_response(response):
@@ -58,6 +61,7 @@ def make_request(page_title):
         
         responses.append(response.json())
     
+    print("Returning", len(responses))
     return responses
 
 
@@ -73,12 +77,14 @@ def main():
         )
         page_titles = list(map(lambda page_id_title: page_id_title[1], page_id_titles))
 
+    page_titles = ["Hamas"]
+
     download(
         keys=page_titles,
-        make_request=make_request,
+        make_request=fetch_all_responses,
         cache=WikiRedirectsCategoriesCache(),
         process_result=process_result,
-        chunk_size=20,
+        chunk_size=1,
         download_rate=50,
     )
 
