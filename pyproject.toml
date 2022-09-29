@@ -39,7 +39,7 @@ wiki-filter-1                   = "code_names_bot_corpus_creator.wiki_filter_1.c
 download-redirects-categories   = "code_names_bot_corpus_creator.wiki_filter_2.download_wiki_redirects_categories:main"
 wiki-filter-2                   = "code_names_bot_corpus_creator.wiki_filter_2.wiki_filter_2:main"
 
-download-api-wiki-page-views    = "code_names_bot_corpus_creator.wiki_page_views_download.download_api_wiki_page_views:main"
+download-api-wiki-page-views    = "code_names_bot_corpus_creator.wiki_filter_3.download_api_wiki_page_views:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
