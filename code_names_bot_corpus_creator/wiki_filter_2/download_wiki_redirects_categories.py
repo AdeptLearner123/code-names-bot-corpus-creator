@@ -90,7 +90,7 @@ def main():
         cache=WikiRedirectsCategoriesCache(),
         process_result=process_result,
         chunk_size=20,
-        download_rate=75,
+        download_rate=50,
     )
 
 
