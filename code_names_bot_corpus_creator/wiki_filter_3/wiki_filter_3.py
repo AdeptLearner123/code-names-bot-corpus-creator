@@ -2,7 +2,7 @@ from code_names_bot_corpus_creator.download.caches import WikiPageViewCache
 from config import WIKI_FILTERED_2, WIKI_FILTERED_3
 
 PAGE_VIEW_THRESHOLD = 1e6
-
+EXCLUDE_PAGES = set(["Main_Page"])
 
 def main():
     with open(WIKI_FILTERED_2) as file:
@@ -14,6 +14,7 @@ def main():
     title_to_views = cache.get_key_to_value()
 
     titles = filter(lambda title: title_to_views[title] > PAGE_VIEW_THRESHOLD, titles)
+    titles = filter(lambda title: title not in EXCLUDE_PAGES, titles)
     lines = [title_to_line[title] for title in titles]
 
     with open(WIKI_FILTERED_3, "w+") as file:
