@@ -47,7 +47,7 @@ def main():
     for title in title_to_json:
         title_to_json[title] = json.loads(title_to_json[title])
 
-    title_to_redirects = { title: get_redirect_titles(title_to_json[title]) for title in titles }
+    title_to_redirects = { title: get_redirect_titles(title_to_json[title]) for title in title_to_json }
 
     titles = filter(lambda title: title in title_to_json, titles)
     titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
