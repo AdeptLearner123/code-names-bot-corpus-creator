@@ -2,7 +2,7 @@ import os
 
 from wordfreq import word_frequency
 
-from config import FILTERED_LEMMAS, ALL_LEMMAS
+from config import OXFORD_FILTERED_1, ALL_LEMMAS
 
 FREQUENCY_THRESHOLD = 4.8e-7
 
@@ -18,7 +18,7 @@ def main():
     )
     lemma_regions = list(lemma_regions)
 
-    with open(FILTERED_LEMMAS, "w+") as file:
+    with open(OXFORD_FILTERED_1, "w+") as file:
         file.write("\n".join(lemma_regions))
 
 
