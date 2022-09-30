@@ -31,9 +31,10 @@ compile-oxford-lemmas           = "code_names_bot_corpus_creator.oxford_scraper.
 
 oxford-filter-1                 = "code_names_bot_corpus_creator.oxford_filter_1.oxford_filter_1:main"
 
-download-lemma-entries          = "code_names_bot_corpus_creator.oxford_entries_download.download_lemma_definitions:main"
 download-lemma-sentences        = "code_names_bot_corpus_creator.oxford_filter_2.download_lemma_sentences:main"
 oxford-filter-2                 = "code_names_bot_corpus_creator.oxford_filter_2.oxford_filter_2:main"
+
+download-lemma-definitions      = "code_names_bot_corpus_creator.oxford_definitions_download.download_lemma_definitions:main"
 
 download-dump-wiki-page-views   = "code_names_bot_corpus_creator.wiki_filter_1.download_dump_wiki_page_views:main"
 wiki-filter-1                   = "code_names_bot_corpus_creator.wiki_filter_1.create_filtered_wiki_pages_list:main"
