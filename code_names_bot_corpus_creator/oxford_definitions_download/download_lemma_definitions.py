@@ -5,15 +5,16 @@ from config import OXFORD_FILTERED_2, MISSING_US_LEMMAS
 from credentials import OXFORD_APP_ID, OXFORD_APP_KEY
 
 GET_URL = (
-    lambda is_us, lemma: f"https://od-api.oxforddictionaries.com/api/v2/words/{'en-us' if is_us else 'en-gb'}/{lemma}?strictMatch=false"
+    lambda is_us: f"https://od-api.oxforddictionaries.com/api/v2/words/{'en-us' if is_us else 'en-gb'}"
 )
 CHUNK_SIZE = 5
 
 
 def get_request_params(lemma, is_us):
     return {
-        "url": GET_URL(is_us, lemma),
-        "headers": {"app_id": OXFORD_APP_ID, "app_key": OXFORD_APP_KEY}
+        "url": GET_URL(is_us),
+        "headers": {"app_id": OXFORD_APP_ID, "app_key": OXFORD_APP_KEY},
+        "params": {"q": lemma},
     }
 
 
