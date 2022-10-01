@@ -1,5 +1,5 @@
-from code_names_bot_corpus_creator.download.caches import WikiRedirectsCategoriesCache
-from code_names_bot_corpus_creator.download.api_downloader import download
+from code_names_bot_dictionary_compiler.download.caches import WikiRedirectsCategoriesCache
+from code_names_bot_dictionary_compiler.download.api_downloader import download
 from config import WIKI_FILTERED_1, MISSING_REDIRECTS_CATEGORIES
 import json
 import requests

@@ -1,6 +1,6 @@
 import json
-from code_names_bot_corpus_creator.download.api_downloader import download
-from code_names_bot_corpus_creator.download.caches import OxfordSentencesCache
+from code_names_bot_dictionary_compiler.download.api_downloader import download
+from code_names_bot_dictionary_compiler.download.caches import OxfordSentencesCache
 from config import OXFORD_FILTERED_1, MISSING_SENTENCES
 from credentials import OXFORD_APP_ID, OXFORD_APP_KEY
 

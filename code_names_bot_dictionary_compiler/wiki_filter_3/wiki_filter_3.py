@@ -1,4 +1,4 @@
-from code_names_bot_corpus_creator.download.caches import WikiPageViewCache
+from code_names_bot_dictionary_compiler.download.caches import WikiPageViewCache
 from config import WIKI_FILTERED_2, WIKI_FILTERED_3
 
 PAGE_VIEW_THRESHOLD = 1e6

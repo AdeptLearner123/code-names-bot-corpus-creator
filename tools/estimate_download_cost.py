@@ -1,4 +1,4 @@
-from code_names_bot_corpus_creator.caches.oxford_cache import OxfordCache
+from code_names_bot_dictionary_compiler.caches.oxford_cache import OxfordCache
 from config import FILTERED_LEMMAS
 
 

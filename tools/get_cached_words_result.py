@@ -1,7 +1,7 @@
 import json
 import sys
 
-from code_names_bot_corpus_creator.download.caches import OxfordDefinitionsCache
+from code_names_bot_dictionary_compiler.download.caches import OxfordDefinitionsCache
 
 
 def main():

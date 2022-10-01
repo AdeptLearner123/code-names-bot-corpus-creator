@@ -1,5 +1,5 @@
-from code_names_bot_corpus_creator.download.caches import WikiSummariesCache
-from code_names_bot_corpus_creator.download.api_downloader import download
+from code_names_bot_dictionary_compiler.download.caches import WikiSummariesCache
+from code_names_bot_dictionary_compiler.download.api_downloader import download
 from config import WIKI_FILTERED_3
 
 from urllib.parse import quote_plus
