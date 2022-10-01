@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "code-names-bot-corpus-creator"
+name = "code-names-bot-dictionary-compiler"
 version = "0.1.0"
 description = ""
 authors = ["Nalu Zou <nalu.zou@gmail.com>"]
@@ -26,26 +26,26 @@ get-dump-wiki-page-views        = "tools.get_dump_wiki_page_views:main"
 get-cached-words-result         = "tools.get_cached_words_result:main"
 estimate-download-cost          = "tools.estimate_download_cost:main"
 
-scrape-oxford-lemmas            = "code_names_bot_corpus_creator.oxford_scraper.scrape_oxford_lemmas:main"
-compile-oxford-lemmas           = "code_names_bot_corpus_creator.oxford_scraper.compile_lemmas:main"
+scrape-oxford-lemmas            = "code_names_bot_dictionary_compiler.oxford_scraper.scrape_oxford_lemmas:main"
+compile-oxford-lemmas           = "code_names_bot_dictionary_compiler.oxford_scraper.compile_lemmas:main"
 
-oxford-filter-1                 = "code_names_bot_corpus_creator.oxford_filter_1.oxford_filter_1:main"
+oxford-filter-1                 = "code_names_bot_dictionary_compiler.oxford_filter_1.oxford_filter_1:main"
 
-download-lemma-sentences        = "code_names_bot_corpus_creator.oxford_filter_2.download_lemma_sentences:main"
-oxford-filter-2                 = "code_names_bot_corpus_creator.oxford_filter_2.oxford_filter_2:main"
+download-lemma-sentences        = "code_names_bot_dictionary_compiler.oxford_filter_2.download_lemma_sentences:main"
+oxford-filter-2                 = "code_names_bot_dictionary_compiler.oxford_filter_2.oxford_filter_2:main"
 
-download-lemma-definitions      = "code_names_bot_corpus_creator.oxford_definitions_download.download_lemma_definitions:main"
+download-lemma-definitions      = "code_names_bot_dictionary_compiler.oxford_definitions_download.download_lemma_definitions:main"
 
-download-dump-wiki-page-views   = "code_names_bot_corpus_creator.wiki_filter_1.download_dump_wiki_page_views:main"
-wiki-filter-1                   = "code_names_bot_corpus_creator.wiki_filter_1.create_filtered_wiki_pages_list:main"
+download-dump-wiki-page-views   = "code_names_bot_dictionary_compiler.wiki_filter_1.download_dump_wiki_page_views:main"
+wiki-filter-1                   = "code_names_bot_dictionary_compiler.wiki_filter_1.create_filtered_wiki_pages_list:main"
 
-download-redirects-categories   = "code_names_bot_corpus_creator.wiki_filter_2.download_wiki_redirects_categories:main"
-wiki-filter-2                   = "code_names_bot_corpus_creator.wiki_filter_2.wiki_filter_2:main"
+download-redirects-categories   = "code_names_bot_dictionary_compiler.wiki_filter_2.download_wiki_redirects_categories:main"
+wiki-filter-2                   = "code_names_bot_dictionary_compiler.wiki_filter_2.wiki_filter_2:main"
 
-download-api-wiki-page-views    = "code_names_bot_corpus_creator.wiki_filter_3.download_api_wiki_page_views:main"
-wiki-filter-3                   = "code_names_bot_corpus_creator.wiki_filter_3.wiki_filter_3:main"
+download-api-wiki-page-views    = "code_names_bot_dictionary_compiler.wiki_filter_3.download_api_wiki_page_views:main"
+wiki-filter-3                   = "code_names_bot_dictionary_compiler.wiki_filter_3.wiki_filter_3:main"
 
-download-wiki-summaries         = "code_names_bot_corpus_creator.wiki_summaries_download.download_wiki_summaries:main"
+download-wiki-summaries         = "code_names_bot_dictionary_compiler.wiki_summaries_download.download_wiki_summaries:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
