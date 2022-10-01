@@ -1,7 +1,7 @@
 import json
 from code_names_bot_corpus_creator.download.api_downloader import download
 from code_names_bot_corpus_creator.download.caches import OxfordDefinitionsCache
-from config import OXFORD_FILTERED_2, MISSING_US_LEMMAS
+from config import OXFORD_FILTERED_2, MISSING_US_LEMMAS, MISSING_LEMMAS
 from credentials import OXFORD_APP_ID, OXFORD_APP_KEY
 
 GET_URL = (
@@ -52,6 +52,10 @@ def main():
         missing_us_lemmas = set(file.read().splitlines())
         for lemma in missing_us_lemmas:
             lemma_to_region[lemma] = False
+
+    with open(MISSING_LEMMAS, "r") as file:
+        missing_lemmas = set(file.read().splitlines())
+        lemmas = list(filter(lambda lemma: lemma not in missing_lemmas))
 
     download(
         keys=lemmas,

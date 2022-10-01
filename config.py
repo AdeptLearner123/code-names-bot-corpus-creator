@@ -6,9 +6,11 @@ WIKI_SUMMARIES_CACHE = "data/caches/wiki_summaries_cache.sqlite"
 
 OXFORD_FILTERED_1 = "data/oxford_filter_1/oxford_filtered_1.txt"
 
-MISSING_US_LEMMAS = "data/oxford_filter_2/missing_us_lemmas.txt"
 MISSING_SENTENCES = "data/oxford_filter_2/missing_sentences.txt"
 OXFORD_FILTERED_2 = "data/oxford_filter_2/oxford_filtered_2.txt"
+
+MISSING_US_LEMMAS = "data/oxford_filter_2/missing_us_lemmas.txt"
+MISSING_LEMMAS = "data/oxford_filter_2/missing_lemmas.txt"
 
 WIKI_PAGES = "data/wiki_pages/wiki_pages.txt"
 
