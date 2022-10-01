@@ -55,7 +55,7 @@ def main():
 
     with open(MISSING_LEMMAS, "r") as file:
         missing_lemmas = set(file.read().splitlines())
-        lemmas = list(filter(lambda lemma: lemma not in missing_lemmas))
+        lemmas = list(filter(lambda lemma: lemma not in missing_lemmas, lemmas))
 
     download(
         keys=lemmas,
