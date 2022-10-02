@@ -1,7 +1,7 @@
 from code_names_bot_dictionary_compiler.download.caches import WikiPageViewCache
 from config import WIKI_FILTERED_2, WIKI_FILTERED_3
 
-PAGE_VIEW_THRESHOLD = 1e6
+PAGE_VIEW_THRESHOLD = 190000 #1e6
 EXCLUDE_PAGES = set(["Main_Page"])
 
 def main():
