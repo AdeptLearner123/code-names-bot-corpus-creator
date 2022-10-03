@@ -1,4 +1,7 @@
-from code_names_bot_dictionary_compiler.download.caches import OxfordDefinitionsCache, OxfordSentencesCache
+from code_names_bot_dictionary_compiler.download.caches import (
+    OxfordDefinitionsCache,
+    OxfordSentencesCache,
+)
 
 from config import OXFORD_FILTERED_1, OXFORD_FILTERED_2
 
@@ -6,7 +9,7 @@ import json
 import yaml
 from collections import defaultdict
 
-CONTENT_POS = set([ "noun", "proper", "verb", "adjective" ])
+CONTENT_POS = set(["noun", "proper", "verb", "adjective"])
 SENTENCE_COUNT_THRESHOLD = 4
 
 
@@ -26,32 +29,40 @@ def get_sense_sentence_counts(lemmas):
                 for sentence in lexical_entry["sentences"]:
                     for sense_id in set(sentence["senseIds"]):
                         sentence_counts[sense_id] += 1
-    
+
     return sentence_counts
 
 
 def extract_sense_data(sense_json):
     if "id" not in sense_json or "definitions" not in sense_json:
         return None
-    
+
     sense_id = sense_json["id"]
     definition = sense_json["definitions"][0]
     synonyms, domains = [], []
 
     if "domainClasses" in sense_json:
-        domains = [ domain_class["id"] for domain_class in sense_json["domainClasses"] ]
+        domains = [domain_class["id"] for domain_class in sense_json["domainClasses"]]
 
     if "synonyms" in sense_json:
-        synonyms = [ synonym["text"] for synonym in sense_json["synonyms"] ]
-    
+        synonyms = [synonym["text"] for synonym in sense_json["synonyms"]]
+
     return (sense_id, definition, synonyms, domains)
+
+
+def format_lemma(lemma):
+    if ", " in lemma:
+        # Names should be converted from Last, First to First Last
+        parts = lemma.split(", ")
+        return parts[1] + " " + parts[0]
+    return lemma
 
 
 def get_sense_definitions(lemmas):
     definitions_cache = OxfordDefinitionsCache()
     definitions = dict()
     query_to_result = definitions_cache.get_key_to_value()
-    
+
     for lemma in lemmas:
         if lemma not in query_to_result:
             continue
@@ -66,12 +77,28 @@ def get_sense_definitions(lemmas):
                 for entry in lexical_entry["entries"]:
                     grammatical_features, inflections = [], []
                     if "grammaticalFeatures" in entry:
-                        grammatical_features = set([ grammatical_feature["id"] for grammatical_feature in entry["grammaticalFeatures"]])
-                    
-                    if "inflections" in entry:
-                        inflections = list(set([ inflection["inflectedForm"] for inflection in entry["inflections"] ]))
+                        grammatical_features = set(
+                            [
+                                grammatical_feature["id"]
+                                for grammatical_feature in entry["grammaticalFeatures"]
+                            ]
+                        )
 
-                    pos = "proper" if "proper" in grammatical_features else lexical_category
+                    if "inflections" in entry:
+                        inflections = list(
+                            set(
+                                [
+                                    inflection["inflectedForm"]
+                                    for inflection in entry["inflections"]
+                                ]
+                            )
+                        )
+
+                    pos = (
+                        "proper"
+                        if "proper" in grammatical_features
+                        else lexical_category
+                    )
 
                     if "senses" in entry:
                         for sense in entry["senses"]:
@@ -80,12 +107,12 @@ def get_sense_definitions(lemmas):
                             if sense_data is not None:
                                 sense_id, definition, synonyms, domains = sense_data
                                 definitions[sense_id] = {
-                                    "text": text,
+                                    "text": format_lemma(text),
                                     "pos": pos,
                                     "definition": definition,
                                     "synonyms": synonyms,
                                     "variants": inflections,
-                                    "domains": domains
+                                    "domains": domains,
                                 }
 
                             if "subsenses" in sense:
@@ -93,35 +120,53 @@ def get_sense_definitions(lemmas):
                                     subsense_data = extract_sense_data(subsense)
 
                                     if subsense_data is not None:
-                                        subsense_id, definition, synonyms, domains = subsense_data
+                                        (
+                                            subsense_id,
+                                            definition,
+                                            synonyms,
+                                            domains,
+                                        ) = subsense_data
                                         definitions[subsense_id] = {
-                                            "text": text,
+                                            "text": format_lemma(text),
                                             "pos": pos,
                                             "definition": definition,
                                             "synonyms": synonyms,
                                             "variants": inflections,
-                                            "domains": domains
-                                    }
+                                            "domains": domains,
+                                        }
     return definitions
 
 
 def main():
     with open(OXFORD_FILTERED_1, "r") as file:
         lemma_regions = file.read().splitlines()
-        lemmas = [ lemma_region.split("|")[0] for lemma_region in lemma_regions ]
+        lemmas = [lemma_region.split("|")[0] for lemma_region in lemma_regions]
 
     sentence_counts = get_sense_sentence_counts(lemmas)
     definitions = get_sense_definitions(lemmas)
 
     sense_ids = definitions.keys()
-    sense_ids = list(filter(lambda sense_id: definitions[sense_id]["pos"] == "proper" or (definitions[sense_id]["pos"] in CONTENT_POS and sentence_counts[sense_id] >= SENTENCE_COUNT_THRESHOLD), sense_ids))
+    sense_ids = list(
+        filter(
+            lambda sense_id: definitions[sense_id]["pos"] == "proper"
+            or (
+                definitions[sense_id]["pos"] in CONTENT_POS
+                and sentence_counts[sense_id] >= SENTENCE_COUNT_THRESHOLD
+            ),
+            sense_ids,
+        )
+    )
 
-    filtered_definitions = { sense_id: definitions[sense_id] for sense_id in sense_ids }
+    filtered_definitions = {sense_id: definitions[sense_id] for sense_id in sense_ids}
+    for sense_id in filtered_definitions:
+        filtered_definitions[sense_id]["sentences"] = sentence_counts[sense_id]
 
     print("Total senses", len(sense_ids))
-    
+
     with open(OXFORD_FILTERED_2, "w+") as file:
-        file.write(yaml.dump(filtered_definitions, sort_keys=True, default_flow_style=None))
+        file.write(
+            yaml.dump(filtered_definitions, sort_keys=True, default_flow_style=None)
+        )
 
 
 if __name__ == "__main__":

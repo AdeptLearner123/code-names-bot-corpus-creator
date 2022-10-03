@@ -1,6 +1,7 @@
 import spacy
 
-nlp = spacy.load('en_core_web_sm', disable = ['ner'])
+nlp = spacy.load("en_core_web_sm", disable=["ner"])
+
 
 def is_proper(text):
     doc = nlp(text)

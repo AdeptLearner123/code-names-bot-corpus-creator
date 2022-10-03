@@ -1,9 +1,13 @@
 import json
-from code_names_bot_dictionary_compiler.download.caches import WikiRedirectsCategoriesCache
+from code_names_bot_dictionary_compiler.download.caches import (
+    WikiRedirectsCategoriesCache,
+)
 from config import WIKI_FILTERED_1, WIKI_FILTERED_2
 
 
-UNWANTED_CATEGORIES = set(["Category:All set index articles", "Category:All disambiguation pages"])
+UNWANTED_CATEGORIES = set(
+    ["Category:All set index articles", "Category:All disambiguation pages"]
+)
 
 
 def is_disambiguation(results):
