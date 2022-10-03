@@ -7,7 +7,7 @@ WIKI_SUMMARIES_CACHE = "data/caches/wiki_summaries_cache.sqlite"
 OXFORD_FILTERED_1 = "data/oxford_filter_1/oxford_filtered_1.txt"
 
 MISSING_SENTENCES = "data/oxford_filter_2/missing_sentences.txt"
-OXFORD_FILTERED_2 = "data/oxford_filter_2/oxford_filtered_2.txt"
+OXFORD_FILTERED_2 = "data/oxford_filter_2/oxford_filtered_2.yaml"
 
 MISSING_US_LEMMAS = "data/oxford_filter_2/missing_us_lemmas.txt"
 MISSING_LEMMAS = "data/oxford_filter_2/missing_lemmas.txt"
@@ -23,6 +23,8 @@ WIKI_FILTERED_2 = "data/wiki_filter_2/wiki_filtered_2.txt"
 
 MISSING_WIKI_PAGE_VIEWS = "data/wiki_filter_3/missing_wiki_page_views.txt"
 WIKI_FILTERED_3 = "data/wiki_filter_3/wiki_filtered_3.txt"
+
+WIKI_FILTERED_4 = "data/wiki_filter_4/wiki_filtered_4.yaml"
 
 SCRAPED_LEMMAS_US_DIR = "data/oxford_scraper/lemmas_us"
 SCRAPED_INDICES_US_DIR = "data/oxford_scraper/indices_us"
