@@ -30,6 +30,7 @@ get-cached-words-result         = "tools.get_cached_words_result:main"
 estimate-download-cost          = "tools.estimate_download_cost:main"
 test-is-proper                  = "tools.test_is_proper:main"
 find-dictionary-duplicates      = "tools.find_dictionary_duplicates:main"
+get-title-labels                = "tools.get_title_labels:main"
 
 scrape-oxford-lemmas            = "code_names_bot_dictionary_compiler.oxford_scraper.scrape_oxford_lemmas:main"
 compile-oxford-lemmas           = "code_names_bot_dictionary_compiler.oxford_scraper.compile_lemmas:main"
@@ -51,6 +52,8 @@ wiki-filter-3                   = "code_names_bot_dictionary_compiler.wiki_filte
 
 download-wiki-summaries         = "code_names_bot_dictionary_compiler.wiki_filter_4.download_wiki_summaries:main"
 wiki-filter-4                   = "code_names_bot_dictionary_compiler.wiki_filter_4.wiki_filter_4:main"
+
+merge-dictionaries              = "code_names_bot_dictionary_compiler.dictionary_compiler.merge_dictionaries:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

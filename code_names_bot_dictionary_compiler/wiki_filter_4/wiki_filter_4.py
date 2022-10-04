@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 
 def format_title(title):
-    return title.split("_(")[0].replace("_", " ").lower()
+    return title.split("_(")[0].replace("_", " ")
 
 
 def main():

@@ -84,15 +84,17 @@ def get_sense_definitions(lemmas):
                             ]
                         )
 
+                    variants = []
                     if "inflections" in entry:
-                        inflections = list(
-                            set(
-                                [
-                                    inflection["inflectedForm"]
-                                    for inflection in entry["inflections"]
-                                ]
-                            )
-                        )
+                        variants += [ inflection["inflectedForm"] for inflection in entry["inflections"] ]
+                    
+                    if "variantForms" in entry:
+                        variants += list(set([ variantForm["text"] for variantForm in entry["variantForms"] ]))
+
+                    variants = set(variants)
+                    if lemma in variants:
+                        variants.remove(lemma)
+                    variants = list(variants)
 
                     pos = (
                         "proper"
@@ -111,7 +113,7 @@ def get_sense_definitions(lemmas):
                                     "pos": pos,
                                     "definition": definition,
                                     "synonyms": synonyms,
-                                    "variants": inflections,
+                                    "variants": variants,
                                     "domains": domains,
                                 }
 
@@ -131,7 +133,7 @@ def get_sense_definitions(lemmas):
                                             "pos": pos,
                                             "definition": definition,
                                             "synonyms": synonyms,
-                                            "variants": inflections,
+                                            "variants": variants,
                                             "domains": domains,
                                         }
     return definitions
