@@ -8,3 +8,8 @@ def is_proper(text):
 
     pos_list = [token.pos_ for token in list(doc.noun_chunks)[0]]
     return "PROPN" in pos_list
+
+
+def split_sentences(text):
+    doc = nlp(text)
+    return [ sentence.text for sentence in doc.sents]

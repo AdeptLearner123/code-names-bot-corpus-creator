@@ -3,37 +3,35 @@ import sys
 import json
 
 from code_names_bot_dictionary_compiler.download.caches import WikiRedirectsCategoriesCache
+from code_names_bot_dictionary_compiler.utils.wiki_utils import get_labels
 
 def get_title_label(title):
     if " (" not in title:
         return None
     return title.split(" (")[1][:-1] 
 
-def get_redirect_labels(results):
-    labels = []
+def get_redirects(results):
+    redirects = []
     for result in results:
         page_result = list(result["query"]["pages"].values())[0]
 
         if "redirects" in page_result:
-            labels += [
-                get_title_label(redirect["title"])
+            redirects += [
+                redirect["title"]
                 for redirect in page_result["redirects"]
             ]
 
-    return labels
+    return redirects
 
 
 def main():
     cache = WikiRedirectsCategoriesCache()
     title = sys.argv[1]
     results = cache.get_cached_value(title)
-
     results = json.loads(results)
-    labels = get_redirect_labels(results)
-    labels.append(get_title_label(title))
 
-    labels = list(set(filter(lambda label: label is not None, labels)))
-
+    redirects = get_redirects(results)
+    labels = get_labels(redirects + [title])
     print(labels)
 
 

@@ -44,7 +44,7 @@ def get_redirect_titles(results):
 
         if "redirects" in page_result:
             redirects += [
-                redirect["title"].split(" (")[0]
+                redirect["title"]
                 for redirect in page_result["redirects"]
             ]
 

@@ -32,4 +32,6 @@ SCRAPED_LEMMAS_WORLD_DIR = "data/oxford_scraper/lemmas_world"
 SCRAPED_INDICES_WORLD_DIR = "data/oxford_scraper/indices_world"
 ALL_LEMMAS = "data/oxford_scraper/all_lemmas.txt"
 
-MERGED_DICTIONARY = "data/dictionary_compiler/merged_dictionary.yaml"
+COMPILED_DICTIONARY = "data/dictionary_compiler/compiled_dictionary.yaml"
+
+CODE_NAMES_LEMMAS = "static/code_names_lemmas.txt"

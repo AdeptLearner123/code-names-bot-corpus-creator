@@ -1,66 +1,83 @@
-from code_names_bot_dictionary_compiler.download.caches import (
-    WikiSummariesCache,
-    WikiPageViewCache,
-)
-from code_names_bot_dictionary_compiler.utils.spacy_utils import is_proper
-from config import WIKI_FILTERED_3, WIKI_FILTERED_4
+from config import WIKI_FILTERED_3, OXFORD_FILTERED_2, WIKI_FILTERED_4
 
 import yaml
 from tqdm import tqdm
 
+from code_names_bot_dictionary_compiler.utils.wiki_utils import get_labels
+from code_names_bot_dictionary_compiler.utils.spacy_utils import is_proper, split_sentences
+from code_names_bot_dictionary_compiler.download.caches import WikiSummariesCache
+
+TARGET_LABELS = set(["company", "brand", "franchise", "film"])
 
 def format_title(title):
-    return title.split("_(")[0].replace("_", " ")
+    return title.replace("_", " ").split(" (")[0].split(":")[-1]
+
+
+def get_variants(main_title, redirects):
+    titles = [ format_title(title) for title in redirects ]
+    titles = [ title for title in titles if len(title) > 0 ]
+    titles = set(titles)
+    if main_title in titles:
+        titles.remove(main_title)
+    titles = filter(lambda title: title.isascii(), titles)
+    return list(titles)
 
 
 def main():
+    print("Status:", "reading")
+    with open(OXFORD_FILTERED_2, "r") as file:
+        oxford_dictionary = yaml.safe_load(file)
+    
+    print("Status:", "getting Oxford variants")
+    oxford_lemmas = []
+    for lemma in oxford_dictionary:
+        oxford_lemmas += [ oxford_dictionary[lemma]["lemma"].lower() ]
+        oxford_lemmas += [ variant.lower() for variant in oxford_dictionary[lemma]["variants"] ]
+    oxford_lemmas = set(oxford_lemmas)
+
+    print("Status:", "reading Wiki titles list")
     with open(WIKI_FILTERED_3) as file:
         lines = file.read().splitlines()
-        titles = [line.split("\t")[1] for line in lines]
-        title_to_redirects = {
-            title: line.split("\t")[2].split("|") for title, line in zip(titles, lines)
-        }
+        titles = [ line.split("\t")[1] for line in lines ]
+        redirects = [ line.split("\t")[2].split("|") for line in lines ]
+        title_to_redirects = { title: redirects for title, redirects in zip(titles, redirects) }
 
-    cache = WikiSummariesCache()
-    title_to_summary = cache.get_key_to_value()
-
-    title_to_views = WikiPageViewCache().get_key_to_value()
-
-    definitions = dict()
-
+    print("Status:", "filtering Wiki articles")
+    filtered_titles = []
+    title_variants = dict()
     for title in tqdm(titles):
-        if title not in title_to_summary:
-            continue
-
-        summary = title_to_summary[title]
-
-        # Higher_Secondary_School_Certificate has empty extract
-        if len(summary) == 0:
-            continue
-
-        try:
-            pos = "proper" if is_proper(summary) else "noun"
-        except:
-            print("Failed", title, summary)
-            break
-
         redirects = title_to_redirects[title]
+        labels = get_labels([title] + redirects)
 
-        formatted_title = format_title(title)
-        if pos == "noun":
-            formatted_title = title.lower()
-            redirects = list(set([redirect.lower() for redirect in redirects]))
+        variants = get_variants(title, redirects)
+        lemma_forms = variants + [title]
 
-        definitions[title] = {
-            "text": formatted_title,
-            "pos": pos,
-            "definition": summary,
-            "variants": redirects,
-            "views": title_to_views[title],
+        title_variants[title] = variants
+
+        if any(label in TARGET_LABELS for label in labels) or not any(lemma_form.lower() in oxford_lemmas for lemma_form in lemma_forms):
+            filtered_titles.append(title)
+
+    title_to_summary = WikiSummariesCache().get_key_to_value()
+    filtered_titles = list(filter(lambda title: title in title_to_summary and is_proper(title_to_summary[title]), filtered_titles))
+
+    print("Status:", "compiling wiki dict")
+    wiki_dict = dict()
+    for title in tqdm(filtered_titles):
+        sentences = split_sentences(title_to_summary[title])
+        definition = sentences[0]
+        texts = sentences[1:]
+        wiki_dict[title] = {
+            "lemma": format_title(title),
+            "definition": definition,
+            "texts": texts,
+            "variants": title_variants[title],
+            "pos": "proper",
+            "source": "WI"
         }
 
+    print("Status:", "dumping")
     with open(WIKI_FILTERED_4, "w+") as file:
-        file.write(yaml.dump(definitions, sort_keys=True, default_flow_style=None))
+        yaml.dump(wiki_dict, file, sort_keys=True, allow_unicode=True)
 
 
 if __name__ == "__main__":
