@@ -34,4 +34,5 @@ ALL_LEMMAS = "data/oxford_scraper/all_lemmas.txt"
 
 COMPILED_DICTIONARY = "data/dictionary_compiler/compiled_dictionary.yaml"
 
-CODE_NAMES_LEMMAS = "static/code_names_lemmas.txt"
+CODE_NAMES_LEMMAS = "unit_tests/data/code_names_lemmas.txt"
+EXPECTED_WIKI_VARIANTS = "unit_tests/data/expected_wiki_variants.yaml"

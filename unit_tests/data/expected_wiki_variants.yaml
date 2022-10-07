@@ -1,0 +1,32 @@
+Meta_Platforms:
+  Contains:
+    - Meta
+    - Facebook, Inc.
+    - TheFacebook, Inc.
+Himachal_Pradesh:
+  Excludes:
+    - ' Agriculture'
+Eminem:
+  Excludes:
+    - Evil
+Andy_Jassy:
+  Contains:
+    - Andrew R. Jassy
+Jeff_Bezos:
+  Contains:
+    - Jeffrey Preston Bezos
+Agatha_Christie:
+  Contains:
+    - Dame Agatha Christie
+Halo_(franchise):
+  Excludes:
+    - ' Helljumper'
+    - Covenant
+Amazon_(company):
+  Contains:
+    - Amazon.com, Inc.
+  Excludes:
+    - SoundUnwound.com
+Amazon_River:
+  Contains:
+    - Amazon

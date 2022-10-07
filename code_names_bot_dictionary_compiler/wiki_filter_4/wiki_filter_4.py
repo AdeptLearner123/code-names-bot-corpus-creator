@@ -3,17 +3,18 @@ from config import WIKI_FILTERED_3, OXFORD_FILTERED_2, WIKI_FILTERED_4
 import yaml
 from tqdm import tqdm
 
-from code_names_bot_dictionary_compiler.utils.wiki_utils import get_labels
+from code_names_bot_dictionary_compiler.wiki_utils.wiki_utils import get_labels
 from code_names_bot_dictionary_compiler.utils.spacy_utils import is_proper, split_sentences
 from code_names_bot_dictionary_compiler.download.caches import WikiSummariesCache
 
 TARGET_LABELS = set(["company", "brand", "franchise", "film"])
 
 def format_title(title):
-    return title.replace("_", " ").split(" (")[0].split(":")[-1]
+    return title.replace("_", " ").split(" (")[0]
 
 
 def get_variants(main_title, redirects):
+    titles = [ title for title in redirects if ":" not in title ]
     titles = [ format_title(title) for title in redirects ]
     titles = [ title for title in titles if len(title) > 0 ]
     titles = set(titles)
