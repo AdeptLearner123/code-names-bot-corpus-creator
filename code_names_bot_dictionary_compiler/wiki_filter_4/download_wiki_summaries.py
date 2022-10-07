@@ -1,6 +1,6 @@
 from code_names_bot_dictionary_compiler.download.caches import WikiSummariesCache
 from code_names_bot_dictionary_compiler.download.api_downloader import download
-from config import WIKI_FILTERED_3
+from config import WIKI_FILTERED_1
 
 from urllib.parse import quote_plus
 
@@ -28,7 +28,7 @@ def process_result(key, result):
 
 
 def main():
-    with open(WIKI_FILTERED_3, "r") as file:
+    with open(WIKI_FILTERED_1, "r") as file:
         page_id_titles = file.read().splitlines()
         page_id_titles = map(
             lambda page_id_title: page_id_title.split("\t"), page_id_titles
