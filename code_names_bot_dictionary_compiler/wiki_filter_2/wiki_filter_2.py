@@ -49,7 +49,7 @@ def main():
         if any(len(variant.split(" ")) <= 2 for variant in variants):
             filtered_titles.append(title)
             title_to_variants[title] = variants
-            title_to_labels[title] = extract_labels(title, redirects)
+            title_to_labels[title] = extract_labels(variants, title, redirects)
 
     with open(WIKI_FILTERED_2, "w+") as file:
         lines = [ f"{title_to_page_id[title]}\t{title}\t{'|'.join(title_to_variants[title])}\t{'|'.join(title_to_labels[title])}" for title in filtered_titles]

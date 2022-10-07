@@ -1,3 +1,4 @@
+from code_names_bot_dictionary_compiler.wiki_utils.entity_classifier import is_entity
 from config import DUMP_WIKI_PAGE_VIEWS, WIKI_PAGES, WIKI_FILTERED_1
 
 
@@ -23,7 +24,7 @@ def main():
     )
 
     filtered_non_lists = filter(
-        lambda page_id_title: not page_id_title[1].startswith("List_of_"),
+        lambda page_id_title: is_entity(page_id_title[1]),
         filtered_by_dump_page_views,
     )
 

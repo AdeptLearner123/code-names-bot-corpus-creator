@@ -8,6 +8,11 @@ EXCLUDE_PAGES = set(["Main_Page"])
 def main():
     with open(WIKI_FILTERED_2) as file:
         lines = file.read().splitlines()
+
+        for line in lines:
+            if len(line.split("\t")) < 2:
+                print("Short line", line)
+
         titles = [line.split("\t")[1] for line in lines]
         title_to_line = {title: line for title, line in zip(titles, lines)}
 

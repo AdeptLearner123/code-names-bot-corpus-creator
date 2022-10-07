@@ -1,4 +1,4 @@
-from code_names_bot_dictionary_compiler.wiki_utils.wiki_utils import format_title
+from .wiki_utils import format_title
 
 def get_title_label(title):
     title = title.replace("_", " ")

@@ -1,3 +1,5 @@
+from code_names_bot_dictionary_compiler.utils.spacy_utils import merge_compounds
+
 from .wiki_utils import format_title
 import spacy
 
@@ -19,18 +21,6 @@ def get_child_entities(token):
     return ents
 
 
-def merge_compounds(doc):
-    with doc.retokenize() as retokenizer:
-        begin = None
-        for token in doc:
-            if token.dep_ == "compound" and begin == None:
-                begin = token.i
-            elif token.dep_ != "compound" and begin != None:
-                retokenizer.merge(doc[begin:token.i + 1])
-                begin = None
-    return doc
-
-
 def get_auxilary(sentence):
     for token in sentence:
         if token.pos_ == "AUX":
@@ -48,10 +38,12 @@ def get_sentence_variants(sentence):
     if len(nsubj_children) == 0:
         return []
     nsubj = nsubj_children[0]
+    print("Noun subj", nsubj.text)
     acl_children = get_children_by_dep(nsubj, ["acl", "appos"])
     ents = [ nsubj.text ]
     for child in acl_children:
         ents += get_child_entities(child)
+    print("Ents", ents)
     return ents
 
 

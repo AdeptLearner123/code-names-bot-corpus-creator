@@ -36,6 +36,7 @@ get-all-semantic-classes        = "tools.get_all_semantic_classes:main"
 test-dict                       = "unit_tests.test_dict:main"
 test-wiki-variants              = "unit_tests.test_wiki_variants_extractor:main"
 test-wiki-labels                = "unit_tests.test_wiki_labels_extractor:main"
+test-wiki-entities              = "unit_tests.test_wiki_entities:main"
 
 manual-test-spacy               = "manual_tests.test_spacy:main"
 manual-test-wiki-variants       = "manual_tests.test_wiki_variants_extractor:main"
@@ -52,7 +53,7 @@ download-lemma-definitions      = "code_names_bot_dictionary_compiler.oxford_fil
 oxford-filter-2                 = "code_names_bot_dictionary_compiler.oxford_filter_2.oxford_filter_2:main"
 
 download-dump-wiki-page-views   = "code_names_bot_dictionary_compiler.wiki_filter_1.download_dump_wiki_page_views:main"
-wiki-filter-1                   = "code_names_bot_dictionary_compiler.wiki_filter_1.create_filtered_wiki_pages_list:main"
+wiki-filter-1                   = "code_names_bot_dictionary_compiler.wiki_filter_1.wiki_filter_1:main"
 
 download-redirects-categories   = "code_names_bot_dictionary_compiler.wiki_filter_2.download_wiki_redirects_categories:main"
 wiki-filter-2                   = "code_names_bot_dictionary_compiler.wiki_filter_2.wiki_filter_2:main"

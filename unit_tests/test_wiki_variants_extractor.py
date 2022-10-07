@@ -1,5 +1,3 @@
-import sys
-
 import yaml
 
 from code_names_bot_dictionary_compiler.wiki_utils.variants_extractor import extract_variants
