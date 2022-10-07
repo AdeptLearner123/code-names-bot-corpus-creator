@@ -3,6 +3,7 @@ Meta_Platforms:
     - Meta
     - Facebook, Inc.
     - TheFacebook, Inc.
+    - Facebook
 Himachal_Pradesh:
   Excludes:
     - ' Agriculture'
@@ -33,3 +34,6 @@ Amazon_River:
 Central_Intelligence_Agency:
   Contains:
     - CIA
+.yt:
+  Excludes:
+    - Internet country

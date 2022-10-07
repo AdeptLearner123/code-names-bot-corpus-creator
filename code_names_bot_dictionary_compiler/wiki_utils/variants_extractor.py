@@ -31,8 +31,23 @@ def merge_compounds(doc):
     return doc
 
 
+def get_auxilary(sentence):
+    for token in sentence:
+        if token.pos_ == "AUX":
+            return token
+    return None
+
+
 def get_sentence_variants(sentence):
-    nsubj = get_children_by_dep(sentence.root, "nsubj")[0]
+    auxilary = get_auxilary(sentence)
+    
+    if auxilary is None:
+        return []
+
+    nsubj_children = get_children_by_dep(auxilary, ["nsubj", "nsubjpass"])
+    if len(nsubj_children) == 0:
+        return []
+    nsubj = nsubj_children[0]
     acl_children = get_children_by_dep(nsubj, ["acl", "appos"])
     ents = [ nsubj.text ]
     for child in acl_children:
@@ -57,10 +72,12 @@ def extract_variants(title, summary, redirects):
     variants = list()
     variants.append(formatted_title)
 
-    doc = nlp(summary)
+    doc = nlp(summary.strip())
     doc = merge_compounds(doc)
-    sentence = list(doc.sents)[0]
-    variants += get_sentence_variants(sentence)
+
+    if len(list(doc.sents)) > 0:
+        sentence = list(doc.sents)[0]
+        variants += get_sentence_variants(sentence)
 
     variants_tokenized = [ get_tokens(variant) for variant in variants ]
     redirects = [ format_title(redirect) for redirect in redirects ]

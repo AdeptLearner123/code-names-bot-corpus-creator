@@ -1,55 +1,17 @@
-import json
+from tqdm import tqdm
+
 from code_names_bot_dictionary_compiler.download.caches import (
-    WikiRedirectsCategoriesCache,
+    WikiRedirectsCategoriesCache, WikiSummariesCache
 )
+from code_names_bot_dictionary_compiler.wiki_utils.redirects_categories_parser import parse_redirects_categories
+from code_names_bot_dictionary_compiler.wiki_utils.variants_extractor import extract_variants
+from code_names_bot_dictionary_compiler.wiki_utils.labels_extractor import extract_labels
 from config import WIKI_FILTERED_1, WIKI_FILTERED_2
 
 
 UNWANTED_CATEGORIES = set(
     ["Category:All set index articles", "Category:All disambiguation pages"]
 )
-
-
-def is_disambiguation(results):
-    for result in results:
-        page_result = list(result["query"]["pages"].values())[0]
-
-        if "categories" in page_result:
-            if any(
-                category["title"] in UNWANTED_CATEGORIES
-                for category in page_result["categories"]
-            ):
-                return True
-
-    return False
-
-
-def get_acronym(title):
-    words = title.replace("_", " ").split(" ")
-    letters = [word[0] for word in words]
-    letters = list(filter(lambda letter: letter.isupper(), letters))
-    return "".join(letters)
-
-
-def has_short_title_or_acronym(title, redirects):
-    return (
-        len(title.replace("_", " ").split(" ")) <= 2 or get_acronym(title) in redirects
-    )
-
-
-def get_redirect_titles(results):
-    redirects = []
-    for result in results:
-        page_result = list(result["query"]["pages"].values())[0]
-
-        if "redirects" in page_result:
-            redirects += [
-                redirect["title"]
-                for redirect in page_result["redirects"]
-            ]
-
-    return redirects
-
 
 def main():
     with open(WIKI_FILTERED_1) as file:
@@ -62,30 +24,35 @@ def main():
         }
         titles = [page_id_title[1] for page_id_title in page_id_titles]
 
-    cache = WikiRedirectsCategoriesCache()
+    redirects_categories_cache = WikiRedirectsCategoriesCache()
+    summaries_cache = WikiSummariesCache()
 
-    title_to_json = cache.get_key_to_value()
-    for title in title_to_json:
-        title_to_json[title] = json.loads(title_to_json[title])
+    title_to_redirects_categories = redirects_categories_cache.get_key_to_value()
+    title_to_summary = summaries_cache.get_key_to_value()
+    titles = list(filter(lambda title: title in title_to_redirects_categories and title in title_to_summary, titles))
 
-    title_to_redirects = {
-        title: get_redirect_titles(title_to_json[title]) for title in title_to_json
-    }
+    filtered_titles = []
+    title_to_variants = {}
+    title_to_labels = {}
+    for title in tqdm(titles):
+        redirects, categories = parse_redirects_categories(title_to_redirects_categories[title])
 
-    titles = filter(lambda title: title in title_to_json, titles)
-    titles = filter(lambda title: not is_disambiguation(title_to_json[title]), titles)
-    titles = filter(
-        lambda title: has_short_title_or_acronym(title, title_to_redirects[title]),
-        titles,
-    )
+        if any(category in UNWANTED_CATEGORIES for category in categories):
+            continue
+
+        summary = title_to_summary[title]
+        try:
+            variants = extract_variants(title, summary, redirects)
+        except:
+            print("Failed", title)
+            break
+        if any(len(variant.split(" ")) <= 2 for variant in variants):
+            filtered_titles.append(title)
+            title_to_variants[title] = variants
+            title_to_labels[title] = extract_labels(title, redirects)
 
     with open(WIKI_FILTERED_2, "w+") as file:
-        lines = list(
-            map(
-                lambda title: f"{title_to_page_id[title]}\t{title}\t{'|'.join(title_to_redirects[title])}",
-                titles,
-            )
-        )
+        lines = [ f"{title_to_page_id[title]}\t{title}\t{'|'.join(title_to_variants[title])}\t{'|'.join(title_to_labels[title])}" for title in filtered_titles]
         file.write("\n".join(lines))
 
 
