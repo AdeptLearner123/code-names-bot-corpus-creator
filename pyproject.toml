@@ -36,8 +36,8 @@ get-all-semantic-classes        = "tools.get_all_semantic_classes:main"
 test-dict                       = "unit_tests.test_dict:main"
 test-wiki-variants              = "unit_tests.test_wiki_variants_extractor:main"
 
-manual-test-spacy                      = "manual_tests.test_spacy:main"
-manual-test-wiki-variants-extractor    = "manual_tests.test_wiki_variants_extractor:main"
+manual-test-spacy               = "manual_tests.test_spacy:main"
+manual-test-wiki-variants       = "manual_tests.test_wiki_variants_extractor:main"
 
 scrape-oxford-lemmas            = "code_names_bot_dictionary_compiler.oxford_scraper.scrape_oxford_lemmas:main"
 compile-oxford-lemmas           = "code_names_bot_dictionary_compiler.oxford_scraper.compile_lemmas:main"

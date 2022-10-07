@@ -3,7 +3,7 @@ import sys
 import json
 
 from code_names_bot_dictionary_compiler.download.caches import WikiRedirectsCategoriesCache
-from code_names_bot_dictionary_compiler.utils.wiki_utils import get_labels
+from code_names_bot_dictionary_compiler.wiki_utils.wiki_utils import get_labels
 
 def get_title_label(title):
     if " (" not in title:

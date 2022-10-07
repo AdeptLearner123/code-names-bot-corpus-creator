@@ -44,9 +44,18 @@ def get_tokens(str):
     return set([ token.text for token in tokenizer(str) ])
 
 
+def get_acronym(title):
+    words = title.split(" ")
+    letters = [word[0] for word in words]
+    letters = list(filter(lambda letter: letter.isupper(), letters))
+    return "".join(letters)
+
+
 def extract_variants(title, summary, redirects):
+    formatted_title = format_title(title)
+
     variants = list()
-    variants.append(format_title(title))
+    variants.append(formatted_title)
 
     doc = nlp(summary)
     doc = merge_compounds(doc)
@@ -54,14 +63,18 @@ def extract_variants(title, summary, redirects):
     variants += get_sentence_variants(sentence)
 
     variants_tokenized = [ get_tokens(variant) for variant in variants ]
+    redirects = [ format_title(redirect) for redirect in redirects ]
     redirect_variants = []
     for redirect in redirects:
-        redirect = format_title(redirect)
         redirect_tokens = get_tokens(redirect)
         
         if any(redirect_tokens.issubset(variant_tokens) for variant_tokens in variants_tokenized):
             redirect_variants.append(redirect)
-    
+
+    acronym = get_acronym(formatted_title)
+    if acronym in redirects:
+        variants.append(acronym)
+
     variants += redirect_variants
     variants = list(set(variants))
     return variants
