@@ -24,6 +24,7 @@ WIKI_FILTERED_2 = "data/wiki_filter_2/wiki_filtered_2.txt"
 MISSING_WIKI_PAGE_VIEWS = "data/wiki_filter_3/missing_wiki_page_views.txt"
 WIKI_FILTERED_3 = "data/wiki_filter_3/wiki_filtered_3.txt"
 
+MISSING_WIKI_SUMMARIES = "data/wiki_filter_4/missing_wiki_summaries.txt"
 WIKI_FILTERED_4 = "data/wiki_filter_4/wiki_filtered_4.yaml"
 
 SCRAPED_LEMMAS_US_DIR = "data/oxford_scraper/lemmas_us"

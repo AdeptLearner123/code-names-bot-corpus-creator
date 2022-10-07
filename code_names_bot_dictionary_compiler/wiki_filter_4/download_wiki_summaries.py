@@ -1,6 +1,6 @@
 from code_names_bot_dictionary_compiler.download.caches import WikiSummariesCache
 from code_names_bot_dictionary_compiler.download.api_downloader import download
-from config import WIKI_FILTERED_1
+from config import WIKI_FILTERED_1, MISSING_WIKI_SUMMARIES
 
 from urllib.parse import quote_plus
 
@@ -19,6 +19,12 @@ def get_request_params(page_title):
 
 
 def process_result(key, result):
+    if result.status_code == 404:
+        print("Not found", key)
+        with open(MISSING_WIKI_SUMMARIES, "a") as file:
+            file.write(key + "\n")
+        return None, True
+
     if result.status_code != 200:
         print("Invalid status code", key, result.text)
         return None, False
@@ -34,6 +40,13 @@ def main():
             lambda page_id_title: page_id_title.split("\t"), page_id_titles
         )
         page_titles = list(map(lambda page_id_title: page_id_title[1], page_id_titles))
+
+    with open(MISSING_WIKI_SUMMARIES, "r") as file:
+        missing_summaries = set(file.read().splitlines())
+
+    page_titles = list(
+        filter(lambda page_title: page_title not in missing_summaries, page_titles)
+    )
 
     download(
         keys=page_titles,
