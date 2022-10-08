@@ -15,8 +15,10 @@ def get_children_by_dep(token, dep_types):
 
 
 def get_child_entities(token):
-    ents = [ child.text for child in token.children if len(child.ent_type_) > 0 and child.ent_type_ not in EXCLUDE_ENT_TYPES ]
+    ents = [ child.text for child in token.children if is_entity(child) ]
     for child in token.children:
+        if child.dep_ == "agent":
+            continue
         ents += get_child_entities(child)
     return ents
 
@@ -26,6 +28,10 @@ def get_auxilary(sentence):
         if token.pos_ == "AUX":
             return token
     return None
+
+
+def is_entity(token):
+    return len(token.ent_type_) > 0 and token.ent_type_ not in EXCLUDE_ENT_TYPES
 
 
 def get_sentence_variants(sentence):
@@ -39,7 +45,7 @@ def get_sentence_variants(sentence):
         return []
     nsubj = nsubj_children[0]
     acl_children = get_children_by_dep(nsubj, ["acl", "appos"])
-    ents = [ nsubj.text ]
+    ents = [ nsubj.text ] if is_entity(nsubj) else []
     for child in acl_children:
         ents += get_child_entities(child)
     return ents
@@ -62,7 +68,7 @@ def extract_variants(title, summary, redirects):
     variants = list()
     variants.append(formatted_title)
 
-    doc = nlp(summary.strip())
+    doc = nlp(summary.strip().replace("\n", " "))
     doc = merge_compounds(doc)
 
     if len(list(doc.sents)) > 0:
