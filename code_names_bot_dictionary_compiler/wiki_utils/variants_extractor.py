@@ -38,12 +38,10 @@ def get_sentence_variants(sentence):
     if len(nsubj_children) == 0:
         return []
     nsubj = nsubj_children[0]
-    print("Noun subj", nsubj.text)
     acl_children = get_children_by_dep(nsubj, ["acl", "appos"])
     ents = [ nsubj.text ]
     for child in acl_children:
         ents += get_child_entities(child)
-    print("Ents", ents)
     return ents
 
 
