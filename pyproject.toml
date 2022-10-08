@@ -26,12 +26,6 @@ setup                           = "tasks:setup"
 
 get-word-freq                   = "tools.get_word_freq:main"
 get-dump-wiki-page-views        = "tools.get_dump_wiki_page_views:main"
-get-cached-words-result         = "tools.get_cached_words_result:main"
-estimate-download-cost          = "tools.estimate_download_cost:main"
-test-is-proper                  = "tools.test_is_proper:main"
-find-dictionary-duplicates      = "tools.find_dictionary_duplicates:main"
-get-title-labels                = "tools.get_title_labels:main"
-get-all-semantic-classes        = "tools.get_all_semantic_classes:main"
 
 test-dict                       = "unit_tests.test_dict:main"
 test-wiki-variants              = "unit_tests.test_wiki_variants_extractor:main"

@@ -28,10 +28,10 @@ def main():
         page_id_titles,
     )
 
-    print("Status:", "Reading dump page views")
+    print("Status:", "Filtering for entities only")
     filtered_non_lists = filter(
         lambda page_id_title: is_entity(page_id_title[1]),
-        tqdm(filtered_by_dump_page_views),
+        tqdm(list(filtered_by_dump_page_views)),
     )
 
     print("Status:", "Dumping")

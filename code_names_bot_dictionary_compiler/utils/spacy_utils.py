@@ -12,9 +12,9 @@ def merge_compounds(doc):
     with doc.retokenize() as retokenizer:
         begin = None
         for token in doc:
-            if token.dep_ == "compound" and begin == None:
-                begin = token.i
-            elif token.dep_ != "compound" and begin != None:
-                retokenizer.merge(doc[begin:token.i + 1])
+            if token.tag_.startswith("NN") and begin == None:
+                begin = token
+            elif not token.tag_.startswith("NN") and token.text != "\u2013" and begin != None:
+                retokenizer.merge(doc[begin.i:token.i])
                 begin = None
     return doc

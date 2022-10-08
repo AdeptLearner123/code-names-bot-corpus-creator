@@ -37,3 +37,13 @@ Central_Intelligence_Agency:
 .yt:
   Excludes:
     - Internet country
+Steele_dossier:
+  Excludes:
+    - Trump
+Xinjiang_internment_camps:
+  Excludes:
+    - internment camps
+    - Xinjiang
+Soviet_Union:
+  Excudes:
+    - Republic
