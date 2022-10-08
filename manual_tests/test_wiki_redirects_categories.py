@@ -1,7 +1,12 @@
 import sys
 
-from code_names_bot_dictionary_compiler.wiki_utils.redirects_categories_parser import parse_redirects_categories
-from code_names_bot_dictionary_compiler.download.caches import WikiRedirectsCategoriesCache
+from code_names_bot_dictionary_compiler.wiki_utils.redirects_categories_parser import (
+    parse_redirects_categories,
+)
+from code_names_bot_dictionary_compiler.download.caches import (
+    WikiRedirectsCategoriesCache,
+)
+
 
 def main():
     title = sys.argv[1]

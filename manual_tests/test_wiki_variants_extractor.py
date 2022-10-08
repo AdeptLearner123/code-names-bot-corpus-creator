@@ -1,8 +1,16 @@
 import sys
 
-from code_names_bot_dictionary_compiler.wiki_utils.variants_extractor import extract_variants
-from code_names_bot_dictionary_compiler.wiki_utils.redirects_categories_parser import parse_redirects_categories
-from code_names_bot_dictionary_compiler.download.caches import WikiRedirectsCategoriesCache, WikiSummariesCache
+from code_names_bot_dictionary_compiler.wiki_utils.variants_extractor import (
+    extract_variants,
+)
+from code_names_bot_dictionary_compiler.wiki_utils.redirects_categories_parser import (
+    parse_redirects_categories,
+)
+from code_names_bot_dictionary_compiler.download.caches import (
+    WikiRedirectsCategoriesCache,
+    WikiSummariesCache,
+)
+
 
 def main():
     title = sys.argv[1]

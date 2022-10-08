@@ -7,15 +7,17 @@ nlp = spacy.load("en_core_web_sm")
 nlp.add_pipe("merge_entities")
 tokenizer = nlp.tokenizer
 
-EXCLUDE_ENT_TYPES = set(["CARDINAL", "DATE", "MONEY", "ORDINAL", "PERCENT", "QUANTITY", "TIME"])
+EXCLUDE_ENT_TYPES = set(
+    ["CARDINAL", "DATE", "MONEY", "ORDINAL", "PERCENT", "QUANTITY", "TIME"]
+)
 
 
 def get_children_by_dep(token, dep_types):
-    return [ child for child in token.children if child.dep_ in dep_types ]
+    return [child for child in token.children if child.dep_ in dep_types]
 
 
 def get_child_entities(token):
-    ents = [ child.text for child in token.children if is_entity(child) ]
+    ents = [child.text for child in token.children if is_entity(child)]
     for child in token.children:
         if child.dep_ == "agent":
             continue
@@ -36,7 +38,7 @@ def is_entity(token):
 
 def get_sentence_variants(sentence):
     auxilary = get_auxilary(sentence)
-    
+
     if auxilary is None:
         return []
 
@@ -45,14 +47,14 @@ def get_sentence_variants(sentence):
         return []
     nsubj = nsubj_children[0]
     acl_children = get_children_by_dep(nsubj, ["acl", "appos"])
-    ents = [ nsubj.text ] if is_entity(nsubj) else []
+    ents = [nsubj.text] if is_entity(nsubj) else []
     for child in acl_children:
         ents += get_child_entities(child)
     return ents
 
 
 def get_tokens(str):
-    return set([ token.text for token in tokenizer(str) ])
+    return set([token.text for token in tokenizer(str)])
 
 
 def get_acronym(title):
@@ -75,13 +77,16 @@ def extract_variants(title, summary, redirects):
         sentence = list(doc.sents)[0]
         variants += get_sentence_variants(sentence)
 
-    variants_tokenized = [ get_tokens(variant) for variant in variants ]
-    redirects = [ format_title(redirect) for redirect in redirects ]
+    variants_tokenized = [get_tokens(variant) for variant in variants]
+    redirects = [format_title(redirect) for redirect in redirects]
     redirect_variants = []
     for redirect in redirects:
         redirect_tokens = get_tokens(redirect)
-        
-        if any(redirect_tokens.issubset(variant_tokens) for variant_tokens in variants_tokenized):
+
+        if any(
+            redirect_tokens.issubset(variant_tokens)
+            for variant_tokens in variants_tokenized
+        ):
             redirect_variants.append(redirect)
 
     acronym = get_acronym(formatted_title)

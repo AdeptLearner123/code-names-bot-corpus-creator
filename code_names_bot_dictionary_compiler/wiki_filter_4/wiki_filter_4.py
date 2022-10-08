@@ -3,7 +3,9 @@ from config import WIKI_FILTERED_3, OXFORD_FILTERED_2, WIKI_FILTERED_4
 import yaml
 from tqdm import tqdm
 
-from code_names_bot_dictionary_compiler.wiki_utils.proper_noun_classifier import is_proper
+from code_names_bot_dictionary_compiler.wiki_utils.proper_noun_classifier import (
+    is_proper,
+)
 from code_names_bot_dictionary_compiler.wiki_utils.wiki_utils import format_title
 from code_names_bot_dictionary_compiler.utils.spacy_utils import split_sentences
 from code_names_bot_dictionary_compiler.download.caches import WikiSummariesCache
@@ -15,22 +17,26 @@ def main():
     print("Status:", "reading")
     with open(OXFORD_FILTERED_2, "r") as file:
         oxford_dictionary = yaml.safe_load(file)
-    
+
     print("Status:", "getting Oxford variants")
     oxford_lemmas = []
     for lemma in oxford_dictionary:
-        oxford_lemmas += [ oxford_dictionary[lemma]["lemma"].lower() ]
-        oxford_lemmas += [ variant.lower() for variant in oxford_dictionary[lemma]["variants"] ]
+        oxford_lemmas += [oxford_dictionary[lemma]["lemma"].lower()]
+        oxford_lemmas += [
+            variant.lower() for variant in oxford_dictionary[lemma]["variants"]
+        ]
     oxford_lemmas = set(oxford_lemmas)
 
     print("Status:", "reading Wiki titles list")
     with open(WIKI_FILTERED_3) as file:
         lines = file.read().splitlines()
-        titles = [ line.split("\t")[1] for line in lines ]
-        variants_list = [ line.split("\t")[2].split("|") for line in lines ]
-        labels_list = [ line.split("\t")[3].split("|") for line in lines ]
-        title_to_variants = { title: variants for title, variants in zip(titles, variants_list) }
-        title_to_labels = { title: labels for title, labels in zip(titles, labels_list )}
+        titles = [line.split("\t")[1] for line in lines]
+        variants_list = [line.split("\t")[2].split("|") for line in lines]
+        labels_list = [line.split("\t")[3].split("|") for line in lines]
+        title_to_variants = {
+            title: variants for title, variants in zip(titles, variants_list)
+        }
+        title_to_labels = {title: labels for title, labels in zip(titles, labels_list)}
 
     print("Status:", "filtering Wiki articles")
     filtered_titles = []
@@ -41,11 +47,19 @@ def main():
 
         title_variants[title] = variants
 
-        if any(label in TARGET_LABELS for label in labels) or not any(variant.lower() in oxford_lemmas for variant in variants):
+        if any(label in TARGET_LABELS for label in labels) or not any(
+            variant.lower() in oxford_lemmas for variant in variants
+        ):
             filtered_titles.append(title)
 
     title_to_summary = WikiSummariesCache().get_key_to_value()
-    filtered_titles = list(filter(lambda title: title in title_to_summary and is_proper(title_to_summary[title]), filtered_titles))
+    filtered_titles = list(
+        filter(
+            lambda title: title in title_to_summary
+            and is_proper(title_to_summary[title]),
+            filtered_titles,
+        )
+    )
 
     print("Status:", "compiling wiki dict")
     wiki_dict = dict()
@@ -62,7 +76,7 @@ def main():
             "texts": texts,
             "variants": variants,
             "pos": "proper",
-            "source": "WI"
+            "source": "WI",
         }
 
     print("Status:", "dumping")

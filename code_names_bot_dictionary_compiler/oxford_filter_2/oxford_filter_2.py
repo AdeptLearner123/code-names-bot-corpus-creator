@@ -103,15 +103,25 @@ def get_sense_definitions(lemmas):
 
                     variants = []
                     if "inflections" in entry:
-                        variants += [ inflection["inflectedForm"] for inflection in entry["inflections"] ]
-                    
+                        variants += [
+                            inflection["inflectedForm"]
+                            for inflection in entry["inflections"]
+                        ]
+
                     if "variantForms" in entry:
-                        variants += list(set([ variantForm["text"] for variantForm in entry["variantForms"] ]))
+                        variants += list(
+                            set(
+                                [
+                                    variantForm["text"]
+                                    for variantForm in entry["variantForms"]
+                                ]
+                            )
+                        )
 
                     if ", " in text:
                         # If the lemma is a person's name, include the last name as a variant.
                         # Otherwise Shakespeare, William won't recognize Shakespeare as a variant.
-                        variants += [ text.split(", ")[0] ]
+                        variants += [text.split(", ")[0]]
 
                     variants = set(variants)
                     if lemma in variants:
@@ -129,7 +139,13 @@ def get_sense_definitions(lemmas):
                             sense_data = extract_sense_data(text, sense)
 
                             if sense_data is not None:
-                                sense_id, definition, texts, synonyms, domains = sense_data
+                                (
+                                    sense_id,
+                                    definition,
+                                    texts,
+                                    synonyms,
+                                    domains,
+                                ) = sense_data
                                 definitions[sense_id] = {
                                     "lemma": format_lemma(text),
                                     "pos": pos,
@@ -138,7 +154,7 @@ def get_sense_definitions(lemmas):
                                     "synonyms": synonyms,
                                     "variants": variants,
                                     "domains": domains,
-                                    "source": "OX"
+                                    "source": "OX",
                                 }
 
                             if "subsenses" in sense:
@@ -161,7 +177,7 @@ def get_sense_definitions(lemmas):
                                             "synonyms": synonyms,
                                             "variants": variants,
                                             "domains": domains,
-                                            "source": "OX"
+                                            "source": "OX",
                                         }
     return definitions
 
@@ -183,7 +199,10 @@ def main():
             lambda sense_id: definitions[sense_id]["pos"] == "proper"
             or (
                 definitions[sense_id]["pos"] in CONTENT_POS
-                and (sentence_counts[sense_id] >= SENTENCE_COUNT_THRESHOLD or definitions[sense_id]["lemma"] in MANUAL_INCLUDE)
+                and (
+                    sentence_counts[sense_id] >= SENTENCE_COUNT_THRESHOLD
+                    or definitions[sense_id]["lemma"] in MANUAL_INCLUDE
+                )
             ),
             sense_ids,
         )
@@ -194,9 +213,7 @@ def main():
     print("Total senses", len(sense_ids))
 
     with open(OXFORD_FILTERED_2, "w+") as file:
-        file.write(
-            yaml.dump(filtered_definitions, sort_keys=True, allow_unicode=True)
-        )
+        file.write(yaml.dump(filtered_definitions, sort_keys=True, allow_unicode=True))
 
 
 if __name__ == "__main__":

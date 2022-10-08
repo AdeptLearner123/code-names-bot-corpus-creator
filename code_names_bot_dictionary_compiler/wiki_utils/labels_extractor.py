@@ -1,10 +1,11 @@
 from .wiki_utils import format_title
 
+
 def get_title_label(title):
     title = title.replace("_", " ")
     if " (" not in title:
         return None
-    return title.split(" (")[1][:-1] 
+    return title.split(" (")[1][:-1]
 
 
 def extract_labels(variants, main_title, redirects):
