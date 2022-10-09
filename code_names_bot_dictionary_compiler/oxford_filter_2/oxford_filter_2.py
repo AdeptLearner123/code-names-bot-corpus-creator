@@ -118,11 +118,6 @@ def get_sense_definitions(lemmas):
                             )
                         )
 
-                    if ", " in text:
-                        # If the lemma is a person's name, include the last name as a variant.
-                        # Otherwise Shakespeare, William won't recognize Shakespeare as a variant.
-                        variants += [text.split(", ")[0]]
-
                     variants = set(variants)
                     if lemma in variants:
                         variants.remove(lemma)
