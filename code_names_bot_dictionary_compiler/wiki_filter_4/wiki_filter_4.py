@@ -65,7 +65,8 @@ def main():
     wiki_dict = dict()
     for title in tqdm(filtered_titles):
         formatted_title = format_title(title)
-        sentences = split_sentences(title_to_summary[title])
+        summary = title_to_summary[title].strip("\n").strip("\t")
+        sentences = split_sentences(summary)
         definition = sentences[0]
         texts = sentences[1:]
         variants = title_variants[title]
