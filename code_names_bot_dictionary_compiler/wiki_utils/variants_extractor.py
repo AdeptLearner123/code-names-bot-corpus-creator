@@ -33,7 +33,7 @@ def get_auxilary(sentence):
 
 
 def is_entity(token):
-    return len(token.ent_type_) > 0 and token.ent_type_ not in EXCLUDE_ENT_TYPES
+    return (len(token.ent_type_) > 0 and token.ent_type_ not in EXCLUDE_ENT_TYPES) or token.pos_ == "PROPN"
 
 
 def get_sentence_variants(sentence):
@@ -46,6 +46,7 @@ def get_sentence_variants(sentence):
     if len(nsubj_children) == 0:
         return []
     nsubj = nsubj_children[0]
+
     acl_children = get_children_by_dep(nsubj, ["acl", "appos"])
     ents = [nsubj.text] if is_entity(nsubj) else []
     for child in acl_children:

@@ -47,3 +47,7 @@ Xinjiang_internment_camps:
 Soviet_Union:
   Excudes:
     - Republic
+Alibaba_Group:
+  Contains:
+    - Alibaba
+    - Alibaba Group Holding Limited
