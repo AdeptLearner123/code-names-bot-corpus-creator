@@ -9,7 +9,6 @@ from config import OXFORD_FILTERED_1, OXFORD_FILTERED_2
 
 from tqdm import tqdm
 import json
-import yaml
 from collections import defaultdict
 
 CONTENT_POS = set(["noun", "proper", "verb", "adjective", "adverb"])
@@ -119,8 +118,8 @@ def get_sense_definitions(lemmas):
                         )
 
                     variants = set(variants)
-                    if lemma in variants:
-                        variants.remove(lemma)
+                    if text in variants:
+                        variants.remove(text)
                     variants = list(variants)
 
                     pos = (
@@ -141,6 +140,7 @@ def get_sense_definitions(lemmas):
                                     synonyms,
                                     domains,
                                 ) = sense_data
+                                
                                 definitions[sense_id] = {
                                     "lemma": format_lemma(text),
                                     "pos": pos,
@@ -208,7 +208,7 @@ def main():
     print("Total senses", len(sense_ids))
 
     with open(OXFORD_FILTERED_2, "w+") as file:
-        file.write(yaml.dump(filtered_definitions, sort_keys=True, allow_unicode=True))
+        file.write(json.dumps(filtered_definitions, sort_keys=True, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 from config import WIKI_FILTERED_3, OXFORD_FILTERED_2, WIKI_FILTERED_4
 
-import yaml
+import json
 from tqdm import tqdm
 
 from code_names_bot_dictionary_compiler.wiki_utils.proper_noun_classifier import (
@@ -16,7 +16,7 @@ TARGET_LABELS = set(["company", "brand", "franchise", "film"])
 def main():
     print("Status:", "reading")
     with open(OXFORD_FILTERED_2, "r") as file:
-        oxford_dictionary = yaml.safe_load(file)
+        oxford_dictionary = json.loads(file.read())
 
     print("Status:", "getting Oxford variants")
     oxford_lemmas = []
@@ -57,7 +57,7 @@ def main():
         filter(
             lambda title: title in title_to_summary
             and is_proper(title_to_summary[title]),
-            filtered_titles,
+            tqdm(filtered_titles),
         )
     )
 
@@ -65,7 +65,7 @@ def main():
     wiki_dict = dict()
     for title in tqdm(filtered_titles):
         formatted_title = format_title(title)
-        summary = title_to_summary[title].strip("\n").strip("\t")
+        summary = title_to_summary[title].replace("\n", "").replace("\t", "")
         sentences = split_sentences(summary)
         definition = sentences[0]
         texts = sentences[1:]
@@ -82,7 +82,7 @@ def main():
 
     print("Status:", "dumping")
     with open(WIKI_FILTERED_4, "w+") as file:
-        yaml.dump(wiki_dict, file, sort_keys=True, allow_unicode=True)
+        file.write(json.dumps(wiki_dict, sort_keys=True, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":
