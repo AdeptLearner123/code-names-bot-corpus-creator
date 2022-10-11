@@ -47,7 +47,7 @@ def extract_sense_data(text, sense_json):
     texts = split_sentences(definition)
     definition = texts[0]
     texts = texts[1:]
-    synonyms, domains = [], []
+    synonyms, domains, variant_forms = [], [], []
 
     if "domainClasses" in sense_json:
         domains = [domain_class["id"] for domain_class in sense_json["domainClasses"]]
@@ -56,8 +56,11 @@ def extract_sense_data(text, sense_json):
         synonyms = [synonym["text"] for synonym in sense_json["synonyms"]]
         if text in synonyms:
             synonyms.remove(text)
+    
+    if "variantForms" in sense_json:
+        variant_forms = [variant_form["text"] for variant_form in sense_json["variantForms"]]
 
-    return (sense_id, definition, texts, synonyms, domains)
+    return (sense_id, definition, texts, synonyms, domains, variant_forms)
 
 
 def format_lemma(lemma):
@@ -139,6 +142,7 @@ def get_sense_definitions(lemmas):
                                     texts,
                                     synonyms,
                                     domains,
+                                    sense_variants
                                 ) = sense_data
                                 
                                 definitions[sense_id] = {
@@ -147,7 +151,7 @@ def get_sense_definitions(lemmas):
                                     "definition": definition,
                                     "texts": texts + notes,
                                     "synonyms": synonyms,
-                                    "variants": variants,
+                                    "variants": variants + sense_variants,
                                     "domains": domains,
                                     "source": "OX",
                                 }
@@ -163,6 +167,7 @@ def get_sense_definitions(lemmas):
                                             texts,
                                             synonyms,
                                             domains,
+                                            sense_variants
                                         ) = subsense_data
                                         definitions[subsense_id] = {
                                             "lemma": format_lemma(text),
@@ -170,7 +175,7 @@ def get_sense_definitions(lemmas):
                                             "definition": definition,
                                             "texts": texts + notes,
                                             "synonyms": synonyms,
-                                            "variants": variants,
+                                            "variants": variants + sense_variants,
                                             "domains": domains,
                                             "source": "OX",
                                         }
@@ -178,10 +183,11 @@ def get_sense_definitions(lemmas):
 
 
 def main():
-    with open(OXFORD_FILTERED_1, "r") as file:
-        lemma_regions = file.read().splitlines()
-        lemmas = [lemma_region.split("|")[0] for lemma_region in lemma_regions]
+    #with open(OXFORD_FILTERED_1, "r") as file:
+    #    lemma_regions = file.read().splitlines()
+    #    lemmas = [lemma_region.split("|")[0] for lemma_region in lemma_regions]
 
+    lemmas = [ "stringed" ]
     print("Status:", "get sentence counts")
     sentence_counts = get_sense_sentence_counts(lemmas)
     print("Status:", "get sentence definitions")
@@ -189,6 +195,10 @@ def main():
 
     print("Status:", "filtering lemmas")
     sense_ids = definitions.keys()
+
+    print("Has stringed", "m_en_gbus1003120.006" in sense_ids)
+    print(definitions["m_en_gbus1003120.006"]["pos"])
+    print(sentence_counts["m_en_gbus1003120.006"])
     sense_ids = list(
         filter(
             lambda sense_id: definitions[sense_id]["pos"] == "proper"
@@ -207,8 +217,8 @@ def main():
 
     print("Total senses", len(sense_ids))
 
-    with open(OXFORD_FILTERED_2, "w+") as file:
-        file.write(json.dumps(filtered_definitions, sort_keys=True, indent=4, ensure_ascii=False))
+    #with open(OXFORD_FILTERED_2, "w+") as file:
+    #    file.write(json.dumps(filtered_definitions, sort_keys=True, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":

@@ -51,3 +51,8 @@ Alibaba_Group:
   Contains:
     - Alibaba
     - Alibaba Group Holding Limited
+Resident_Evil:
+  Contains:
+    - Biohazard
+  Excludes:
+    - Japan

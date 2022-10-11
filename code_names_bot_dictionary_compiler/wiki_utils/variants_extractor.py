@@ -17,7 +17,7 @@ def get_children_by_dep(token, dep_types):
 
 
 def get_child_entities(token):
-    ents = [child.text for child in token.children if is_entity(child)]
+    ents = [child.text for child in token.children if is_entity(child) and check_dep(child)]
     for child in token.children:
         if child.dep_ == "agent":
             continue
@@ -34,6 +34,15 @@ def get_auxilary(sentence):
 
 def is_entity(token):
     return (len(token.ent_type_) > 0 and token.ent_type_ not in EXCLUDE_ENT_TYPES) or token.pos_ == "PROPN"
+
+
+def check_dep(token):
+    dep = token.dep_
+    head = token.head
+    while dep == "conj":
+        dep = head.dep_
+        head = head.head
+    return (dep == "pobj" and head.text == "as") or dep == "oprd"
 
 
 def get_sentence_variants(sentence):

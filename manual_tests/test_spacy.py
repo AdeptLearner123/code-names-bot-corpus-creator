@@ -9,7 +9,8 @@ def main():
     # nlp.add_pipe("merge_entities")
     doc = nlp(sys.argv[1])
 
-    displacy.serve(doc, style="dep", port=5001)
+    style = "dep" if len(sys.argv) < 3 else sys.argv[2]
+    displacy.serve(doc, style=style, port=5001)
 
 
 if __name__ == "__main__":
