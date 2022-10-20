@@ -183,11 +183,10 @@ def get_sense_definitions(lemmas):
 
 
 def main():
-    #with open(OXFORD_FILTERED_1, "r") as file:
-    #    lemma_regions = file.read().splitlines()
-    #    lemmas = [lemma_region.split("|")[0] for lemma_region in lemma_regions]
+    with open(OXFORD_FILTERED_1, "r") as file:
+        lemma_regions = file.read().splitlines()
+        lemmas = [lemma_region.split("|")[0] for lemma_region in lemma_regions]
 
-    lemmas = [ "stringed" ]
     print("Status:", "get sentence counts")
     sentence_counts = get_sense_sentence_counts(lemmas)
     print("Status:", "get sentence definitions")
@@ -196,9 +195,6 @@ def main():
     print("Status:", "filtering lemmas")
     sense_ids = definitions.keys()
 
-    print("Has stringed", "m_en_gbus1003120.006" in sense_ids)
-    print(definitions["m_en_gbus1003120.006"]["pos"])
-    print(sentence_counts["m_en_gbus1003120.006"])
     sense_ids = list(
         filter(
             lambda sense_id: definitions[sense_id]["pos"] == "proper"
@@ -217,8 +213,8 @@ def main():
 
     print("Total senses", len(sense_ids))
 
-    #with open(OXFORD_FILTERED_2, "w+") as file:
-    #    file.write(json.dumps(filtered_definitions, sort_keys=True, indent=4, ensure_ascii=False))
+    with open(OXFORD_FILTERED_2, "w+") as file:
+        file.write(json.dumps(filtered_definitions, sort_keys=True, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":
