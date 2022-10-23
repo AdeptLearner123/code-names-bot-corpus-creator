@@ -36,6 +36,7 @@ manual-test-spacy               = "manual_tests.test_spacy:main"
 manual-test-wiki-variants       = "manual_tests.test_wiki_variants_extractor:main"
 manual-test-wiki-labels         = "manual_tests.test_wiki_labels_extractor:main"
 manual-test-redirects-categories    = "manual_tests.test_wiki_redirects_categories:main"
+manual-test-definition-formatter    = "manual_tests.test_wiki_definition_formatter:main"
 
 scrape-oxford-lemmas            = "code_names_bot_dictionary_compiler.oxford_scraper.scrape_oxford_lemmas:main"
 compile-oxford-lemmas           = "code_names_bot_dictionary_compiler.oxford_scraper.compile_lemmas:main"
@@ -45,6 +46,8 @@ oxford-filter-1                 = "code_names_bot_dictionary_compiler.oxford_fil
 download-lemma-sentences        = "code_names_bot_dictionary_compiler.oxford_filter_2.download_lemma_sentences:main"
 download-lemma-definitions      = "code_names_bot_dictionary_compiler.oxford_filter_2.download_lemma_definitions:main"
 oxford-filter-2                 = "code_names_bot_dictionary_compiler.oxford_filter_2.oxford_filter_2:main"
+
+oxford-filter-3                 = "code_names_bot_dictionary_compiler.oxford_filter_3.oxford_filter_3:main"
 
 download-dump-wiki-page-views   = "code_names_bot_dictionary_compiler.wiki_filter_1.download_dump_wiki_page_views:main"
 wiki-filter-1                   = "code_names_bot_dictionary_compiler.wiki_filter_1.wiki_filter_1:main"

@@ -7,7 +7,8 @@ from code_names_bot_dictionary_compiler.wiki_utils.proper_noun_classifier import
     is_proper,
 )
 from code_names_bot_dictionary_compiler.wiki_utils.wiki_utils import format_title
-from code_names_bot_dictionary_compiler.utils.spacy_utils import split_sentences
+from code_names_bot_dictionary_compiler.wiki_utils.definition_formatter import format_definition
+from code_names_bot_dictionary_compiler.utils.spacy_utils import split_sentences, format_sentence_text
 from code_names_bot_dictionary_compiler.download.caches import WikiSummariesCache
 
 TARGET_LABELS = set(["company", "brand", "franchise", "film"])
@@ -65,19 +66,27 @@ def main():
     wiki_dict = dict()
     for title in tqdm(filtered_titles):
         formatted_title = format_title(title)
-        summary = title_to_summary[title].replace("\n", "").replace("\t", "")
+        summary = title_to_summary[title].replace("\n", "").replace("\t", "").strip()
         sentences = split_sentences(summary)
-        definition = sentences[0]
-        texts = sentences[1:]
+        try:
+            definition = format_definition(sentences[0])
+        except:
+            print("Failed for ", title)
+            raise
+        texts = [ format_sentence_text(text) for text in sentences[1:] ]
         variants = title_variants[title]
         variants.remove(formatted_title)
         wiki_dict[title] = {
             "lemma": formatted_title,
+            "source": "WI",
+            "pos": "proper",
             "definition": definition,
             "texts": texts,
             "variants": variants,
-            "pos": "proper",
-            "source": "WI",
+            "synonyms": [],
+            "domains": [],
+            "classes": [],
+            "meta": {}
         }
 
     print("Status:", "dumping")

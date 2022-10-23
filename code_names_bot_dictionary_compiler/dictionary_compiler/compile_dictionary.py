@@ -1,10 +1,10 @@
-from config import WIKI_FILTERED_4, OXFORD_FILTERED_2, COMPILED_DICTIONARY
+from config import WIKI_FILTERED_4, OXFORD_FILTERED_3, COMPILED_DICTIONARY
 
 import json
 
 
 def main():
-    with open(OXFORD_FILTERED_2, "r") as file:
+    with open(OXFORD_FILTERED_3, "r") as file:
         oxford_dictionary = json.loads(file.read())
 
     with open(WIKI_FILTERED_4, "r") as file:

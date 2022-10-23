@@ -9,6 +9,8 @@ OXFORD_FILTERED_1 = "data/oxford_filter_1/oxford_filtered_1.txt"
 MISSING_SENTENCES = "data/oxford_filter_2/missing_sentences.txt"
 OXFORD_FILTERED_2 = "data/oxford_filter_2/oxford_filtered_2.json"
 
+OXFORD_FILTERED_3 = "data/oxford_filter_3/oxford_filtered_3.json"
+
 MISSING_US_LEMMAS = "data/oxford_filter_2/missing_us_lemmas.txt"
 MISSING_LEMMAS = "data/oxford_filter_2/missing_lemmas.txt"
 

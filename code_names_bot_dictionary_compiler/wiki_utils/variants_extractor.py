@@ -1,5 +1,6 @@
 from code_names_bot_dictionary_compiler.utils.spacy_utils import merge_compounds
 
+from code_names_bot_dictionary_compiler.utils.spacy_utils import get_children_by_dep, get_auxilary
 from .wiki_utils import format_title
 import spacy
 
@@ -12,10 +13,6 @@ EXCLUDE_ENT_TYPES = set(
 )
 
 
-def get_children_by_dep(token, dep_types):
-    return [child for child in token.children if child.dep_ in dep_types]
-
-
 def get_child_entities(token):
     ents = [child.text for child in token.children if is_entity(child) and check_dep(child)]
     for child in token.children:
@@ -23,13 +20,6 @@ def get_child_entities(token):
             continue
         ents += get_child_entities(child)
     return ents
-
-
-def get_auxilary(sentence):
-    for token in sentence:
-        if token.pos_ == "AUX":
-            return token
-    return None
 
 
 def is_entity(token):

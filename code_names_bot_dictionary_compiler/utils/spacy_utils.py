@@ -22,3 +22,28 @@ def merge_compounds(doc):
                 retokenizer.merge(doc[begin.i : token.i])
                 begin = None
     return doc
+
+
+def get_children_by_dep(token, dep_types):
+    return [child for child in token.children if child.dep_ in dep_types]
+
+
+def get_auxilary(sentence):
+    for token in sentence:
+        if token.pos_ == "AUX":
+            return token
+    return None
+
+
+def format_sentence(sentence):
+    sentence_text = sentence.text
+    if sentence[0].pos_ != "PROPN":
+        sentence_text = sentence_text[0].lower() + sentence_text[1:]
+    if sentence_text[-1] == ".":
+        sentence_text = sentence_text[:-1]
+    return sentence_text
+
+
+def format_sentence_text(sentence_text):
+    sentence = nlp(sentence_text)
+    return format_sentence(sentence)

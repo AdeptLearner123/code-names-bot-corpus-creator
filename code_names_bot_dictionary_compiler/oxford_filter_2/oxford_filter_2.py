@@ -3,7 +3,8 @@ from code_names_bot_dictionary_compiler.download.caches import (
     OxfordSentencesCache,
 )
 
-from code_names_bot_dictionary_compiler.utils.spacy_utils import split_sentences
+from code_names_bot_dictionary_compiler.utils.spacy_utils import split_sentences, format_sentence_text
+from code_names_bot_dictionary_compiler.oxford_utils.sense_iterator import iterate_senses
 
 from config import OXFORD_FILTERED_1, OXFORD_FILTERED_2
 
@@ -39,28 +40,15 @@ def get_sense_sentence_counts(lemmas):
 
 
 def extract_sense_data(text, sense_json):
-    if "id" not in sense_json or "definitions" not in sense_json:
-        return None
-
     sense_id = sense_json["id"]
+    # NOTE: Some definitions have multiple sentences, such as for "Scandinavia"
     definition = sense_json["definitions"][0]
     texts = split_sentences(definition)
+    texts = [ format_sentence_text(text) for text in texts ]
     definition = texts[0]
     texts = texts[1:]
-    synonyms, domains, variant_forms = [], [], []
 
-    if "domainClasses" in sense_json:
-        domains = [domain_class["id"] for domain_class in sense_json["domainClasses"]]
-
-    if "synonyms" in sense_json:
-        synonyms = [synonym["text"] for synonym in sense_json["synonyms"]]
-        if text in synonyms:
-            synonyms.remove(text)
-    
-    if "variantForms" in sense_json:
-        variant_forms = [variant_form["text"] for variant_form in sense_json["variantForms"]]
-
-    return (sense_id, definition, texts, synonyms, domains, variant_forms)
+    return (sense_id, definition, texts)
 
 
 def format_lemma(lemma):
@@ -74,111 +62,45 @@ def format_lemma(lemma):
 def get_sense_definitions(lemmas):
     definitions_cache = OxfordDefinitionsCache()
     definitions = dict()
-    query_to_result = definitions_cache.get_key_to_value()
 
-    for lemma in tqdm(lemmas):
-        if lemma not in query_to_result:
-            continue
+    for lexical_entry, entry, sense, _ in iterate_senses(definitions_cache, tqdm(lemmas)):
+        lemma_text = lexical_entry["text"]
+        lexical_category = lexical_entry["lexicalCategory"]["id"]
 
-        results_str = query_to_result[lemma]
-        results = json.loads(results_str)
-        for result in results["results"]:
-            for lexical_entry in result["lexicalEntries"]:
-                text = lexical_entry["text"]
-                lexical_category = lexical_entry["lexicalCategory"]["id"]
+        grammatical_features = []
+        if "grammaticalFeatures" in entry:
+            grammatical_features = set([ item["id"] for item in entry["grammaticalFeatures"] ])
 
-                for entry in lexical_entry["entries"]:
-                    grammatical_features = []
-                    if "grammaticalFeatures" in entry:
-                        grammatical_features = set(
-                            [
-                                grammatical_feature["id"]
-                                for grammatical_feature in entry["grammaticalFeatures"]
-                            ]
-                        )
+        pos = (
+            "proper"
+            if "proper" in grammatical_features
+            else lexical_category
+        )
 
-                    notes = []
-                    if "notes" in entry:
-                        for note in entry["notes"]:
-                            if note["type"] == "encyclopedicNote":
-                                notes += split_sentences(note["text"])
+        notes = []
+        if "notes" in entry:
+            for note in entry["notes"]:
+                if note["type"] == "encyclopedicNote":
+                    notes += split_sentences(note["text"])
+        notes = [ format_sentence_text(note) for note in notes ]
 
-                    variants = []
-                    if "inflections" in entry:
-                        variants += [
-                            inflection["inflectedForm"]
-                            for inflection in entry["inflections"]
-                        ]
+        sense_data = extract_sense_data(lemma_text, sense)
 
-                    if "variantForms" in entry:
-                        variants += list(
-                            set(
-                                [
-                                    variantForm["text"]
-                                    for variantForm in entry["variantForms"]
-                                ]
-                            )
-                        )
+        if sense_data is not None:
+            (
+                sense_id,
+                definition,
+                texts
+            ) = sense_data
+            
+            definitions[sense_id] = {
+                "lemma": format_lemma(lemma_text),
+                "source": "OX",
+                "pos": pos,
+                "definition": definition,
+                "texts": texts + notes
+            }
 
-                    variants = set(variants)
-                    if text in variants:
-                        variants.remove(text)
-                    variants = list(variants)
-
-                    pos = (
-                        "proper"
-                        if "proper" in grammatical_features
-                        else lexical_category
-                    )
-
-                    if "senses" in entry:
-                        for sense in entry["senses"]:
-                            sense_data = extract_sense_data(text, sense)
-
-                            if sense_data is not None:
-                                (
-                                    sense_id,
-                                    definition,
-                                    texts,
-                                    synonyms,
-                                    domains,
-                                    sense_variants
-                                ) = sense_data
-                                
-                                definitions[sense_id] = {
-                                    "lemma": format_lemma(text),
-                                    "pos": pos,
-                                    "definition": definition,
-                                    "texts": texts + notes,
-                                    "synonyms": synonyms,
-                                    "variants": variants + sense_variants,
-                                    "domains": domains,
-                                    "source": "OX",
-                                }
-
-                            if "subsenses" in sense:
-                                for subsense in sense["subsenses"]:
-                                    subsense_data = extract_sense_data(text, subsense)
-
-                                    if subsense_data is not None:
-                                        (
-                                            subsense_id,
-                                            definition,
-                                            texts,
-                                            synonyms,
-                                            domains,
-                                            sense_variants
-                                        ) = subsense_data
-                                        definitions[subsense_id] = {
-                                            "lemma": format_lemma(text),
-                                            "pos": pos,
-                                            "definition": definition,
-                                            "texts": texts + notes,
-                                            "synonyms": synonyms,
-                                            "variants": variants + sense_variants,
-                                            "domains": domains,
-                                            "source": "OX",
-                                        }
     return definitions
 
 
