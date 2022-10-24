@@ -3,7 +3,7 @@ from code_names_bot_dictionary_compiler.download.caches import (
     OxfordSentencesCache,
 )
 
-from code_names_bot_dictionary_compiler.utils.spacy_utils import split_sentences, format_sentence_text
+from code_names_bot_dictionary_compiler.utils.spacy_utils import split_format_sentences
 from code_names_bot_dictionary_compiler.oxford_utils.sense_iterator import iterate_senses
 
 from config import OXFORD_FILTERED_1, OXFORD_FILTERED_2
@@ -16,7 +16,9 @@ CONTENT_POS = set(["noun", "proper", "verb", "adjective", "adverb"])
 SENTENCE_COUNT_THRESHOLD = 4
 
 # This is for lemmas that don't have example sentences but are commonly known
-MANUAL_INCLUDE = set(["scuba diver"])
+MANUAL_INCLUDE = set([
+    "m_en_gbus1189026.002"  # scuba diver
+])
 
 
 def get_sense_sentence_counts(lemmas):
@@ -39,16 +41,38 @@ def get_sense_sentence_counts(lemmas):
     return sentence_counts
 
 
-def extract_sense_data(text, sense_json):
-    sense_id = sense_json["id"]
+def get_sense_pos(definitions_cache):
+    sense_pos = dict()
+    for lexical_entry, entry, sense, _ in iterate_senses(definitions_cache):
+        sense_id = sense["id"]
+        lexical_category = lexical_entry["lexicalCategory"]["id"]
+
+        grammatical_features = []
+        if "grammaticalFeatures" in entry:
+            grammatical_features = set([ item["id"] for item in entry["grammaticalFeatures"] ])
+
+        sense_pos[sense_id] = "proper" if "proper" in grammatical_features else lexical_category
+    return sense_pos
+
+
+def get_filtered_senses(sentence_counts, sense_pos):
+    sense_ids = []
+
+    for sense_id, pos in sense_pos.items():        
+        if sense_id in MANUAL_INCLUDE or pos == "proper" or (pos in CONTENT_POS and sentence_counts[sense_id] >= SENTENCE_COUNT_THRESHOLD):
+            sense_ids.append(sense_id)
+    
+    return sense_ids
+
+
+def extract_sense_data(sense_json):
     # NOTE: Some definitions have multiple sentences, such as for "Scandinavia"
     definition = sense_json["definitions"][0]
-    texts = split_sentences(definition)
-    texts = [ format_sentence_text(text) for text in texts ]
+    texts = split_format_sentences(definition)
     definition = texts[0]
     texts = texts[1:]
 
-    return (sense_id, definition, texts)
+    return (definition, texts)
 
 
 def format_lemma(lemma):
@@ -59,36 +83,30 @@ def format_lemma(lemma):
     return lemma
 
 
-def get_sense_definitions(lemmas):
+def create_dictionary(filtered_senses, sense_pos, sentence_counts):
     definitions_cache = OxfordDefinitionsCache()
     definitions = dict()
 
-    for lexical_entry, entry, sense, _ in iterate_senses(definitions_cache, tqdm(lemmas)):
+    for lexical_entry, entry, sense, _ in iterate_senses(definitions_cache):
+        sense_id = sense["id"]
+        if sense_id not in filtered_senses:
+            continue
+
+        pos = sense_pos[sense_id]
+        sentence_count = sentence_counts[sense_id]
+
         lemma_text = lexical_entry["text"]
-        lexical_category = lexical_entry["lexicalCategory"]["id"]
-
-        grammatical_features = []
-        if "grammaticalFeatures" in entry:
-            grammatical_features = set([ item["id"] for item in entry["grammaticalFeatures"] ])
-
-        pos = (
-            "proper"
-            if "proper" in grammatical_features
-            else lexical_category
-        )
 
         notes = []
         if "notes" in entry:
             for note in entry["notes"]:
                 if note["type"] == "encyclopedicNote":
-                    notes += split_sentences(note["text"])
-        notes = [ format_sentence_text(note) for note in notes ]
+                    notes += split_format_sentences(note["text"])
 
-        sense_data = extract_sense_data(lemma_text, sense)
+        sense_data = extract_sense_data(sense)
 
         if sense_data is not None:
             (
-                sense_id,
                 definition,
                 texts
             ) = sense_data
@@ -98,7 +116,10 @@ def get_sense_definitions(lemmas):
                 "source": "OX",
                 "pos": pos,
                 "definition": definition,
-                "texts": texts + notes
+                "texts": texts + notes,
+                "meta": {
+                    "sentence_count": sentence_count
+                }
             }
 
     return definitions
@@ -109,34 +130,24 @@ def main():
         lemma_regions = file.read().splitlines()
         lemmas = [lemma_region.split("|")[0] for lemma_region in lemma_regions]
 
+    definitions_cache = OxfordDefinitionsCache()
+
     print("Status:", "get sentence counts")
     sentence_counts = get_sense_sentence_counts(lemmas)
-    print("Status:", "get sentence definitions")
-    definitions = get_sense_definitions(lemmas)
 
-    print("Status:", "filtering lemmas")
-    sense_ids = definitions.keys()
+    print("Status:", "get sense pos")
+    sense_pos = get_sense_pos(definitions_cache)
 
-    sense_ids = list(
-        filter(
-            lambda sense_id: definitions[sense_id]["pos"] == "proper"
-            or (
-                definitions[sense_id]["pos"] in CONTENT_POS
-                and (
-                    sentence_counts[sense_id] >= SENTENCE_COUNT_THRESHOLD
-                    or definitions[sense_id]["lemma"] in MANUAL_INCLUDE
-                )
-            ),
-            sense_ids,
-        )
-    )
+    print("Status:", "filtering")
+    filtered_senses = get_filtered_senses(sentence_counts, sense_pos)
 
-    filtered_definitions = {sense_id: definitions[sense_id] for sense_id in sense_ids}
+    print("Status:", "creating dictionary")
+    dictionary = create_dictionary(filtered_senses, sense_pos, sentence_counts)
 
-    print("Total senses", len(sense_ids))
+    print("Total senses", len(dictionary))
 
     with open(OXFORD_FILTERED_2, "w+") as file:
-        file.write(json.dumps(filtered_definitions, sort_keys=True, indent=4, ensure_ascii=False))
+        file.write(json.dumps(dictionary, sort_keys=True, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":

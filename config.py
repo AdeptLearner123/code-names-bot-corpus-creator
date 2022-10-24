@@ -35,7 +35,7 @@ SCRAPED_LEMMAS_WORLD_DIR = "data/oxford_scraper/lemmas_world"
 SCRAPED_INDICES_WORLD_DIR = "data/oxford_scraper/indices_world"
 ALL_LEMMAS = "data/oxford_scraper/all_lemmas.txt"
 
-COMPILED_DICTIONARY = "data/dictionary_compiler/compiled_dictionary.json"
+COMPILED_DICTIONARY = "data/dictionary_compiler/dictionary.json"
 
 CODE_NAMES_LEMMAS = "unit_tests/data/code_names_lemmas.txt"
 EXPECTED_WIKI_VARIANTS = "unit_tests/data/expected_wiki_variants.yaml"

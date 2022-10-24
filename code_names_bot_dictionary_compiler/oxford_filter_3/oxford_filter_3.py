@@ -45,7 +45,7 @@ def get_entry_variants(entry):
     return variants
 
 
-def enhance_sense(entry, sense, is_subsense, dictionary):
+def enhance_sense(entry, sense, meta, dictionary):
     sense_id = sense["id"]
     if sense_id not in dictionary:
         return
@@ -61,14 +61,17 @@ def enhance_sense(entry, sense, is_subsense, dictionary):
         variants.remove(lemma)
     variants = list(variants)
 
+    sense_idx, is_subsense = meta
+    dictionary[sense_id]["meta"].update({
+        "sense_idx": sense_idx,
+        "is_subsense": is_subsense
+    })
+
     dictionary[sense_id].update({
         "variants": variants + sense_variants,
         "synonyms": synonyms,
         "domains": domains,
-        "classes": classes,
-        "meta": {
-            "is_subsense": is_subsense
-        }
+        "classes": classes
     })
 
 
@@ -77,8 +80,8 @@ def main():
         dictionary = json.loads(file.read())
 
     definitions_cache = OxfordDefinitionsCache()
-    for _, entry, sense, is_subsense in iterate_senses(definitions_cache):
-        enhance_sense(entry, sense, is_subsense, dictionary)
+    for _, entry, sense, meta in iterate_senses(definitions_cache):
+        enhance_sense(entry, sense, meta, dictionary)
 
     with open(OXFORD_FILTERED_3, "w+") as file:
         file.write(json.dumps(dictionary, sort_keys=True, indent=4, ensure_ascii=False))

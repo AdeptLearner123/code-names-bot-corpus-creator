@@ -9,7 +9,7 @@ def iterate_senses(definitions_cache, queries = None):
     query_to_result = definitions_cache.get_key_to_value()
 
     if queries is None:
-        queries = query_to_result.keys()
+        queries = tqdm(list(query_to_result.keys()))
     
     for query in queries:
         if query not in query_to_result:
@@ -21,11 +21,11 @@ def iterate_senses(definitions_cache, queries = None):
             for lexical_entry in result["lexicalEntries"]:
                 for entry in lexical_entry["entries"]:
                     if "senses" in entry:
-                        for sense in entry["senses"]:
+                        for sense_idx, sense in enumerate(entry["senses"]):
                             if sense_is_valid(sense):
-                                yield lexical_entry, entry, sense, False
+                                yield lexical_entry, entry, sense, (sense_idx, False)
 
                             if "subsenses" in sense:
-                                for subsense in sense["subsenses"]:
+                                for subsense_idx, subsense in enumerate(sense["subsenses"]):
                                     if sense_is_valid(subsense):
-                                        yield lexical_entry, entry, subsense, True
+                                        yield lexical_entry, entry, subsense, (subsense_idx, True)

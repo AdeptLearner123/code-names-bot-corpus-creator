@@ -47,3 +47,8 @@ def format_sentence(sentence):
 def format_sentence_text(sentence_text):
     sentence = nlp(sentence_text)
     return format_sentence(sentence)
+
+
+def split_format_sentences(text):
+    doc = nlp(text)
+    return [ format_sentence(sent) for sent in doc.sents ]
