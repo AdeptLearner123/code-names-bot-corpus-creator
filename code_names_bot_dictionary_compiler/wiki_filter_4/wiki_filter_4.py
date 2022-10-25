@@ -1,4 +1,4 @@
-from config import WIKI_FILTERED_3, OXFORD_FILTERED_2, WIKI_FILTERED_4
+from config import WIKI_FILTERED_3, OXFORD_FILTERED_3, WIKI_FILTERED_4
 
 import json
 from tqdm import tqdm
@@ -16,7 +16,7 @@ TARGET_LABELS = set(["company", "brand", "franchise", "film"])
 
 def main():
     print("Status:", "reading")
-    with open(OXFORD_FILTERED_2, "r") as file:
+    with open(OXFORD_FILTERED_3, "r") as file:
         oxford_dictionary = json.loads(file.read())
 
     print("Status:", "getting Oxford variants")
@@ -83,6 +83,7 @@ def main():
             "definition": definition,
             "texts": texts,
             "variants": variants,
+            "derivatives": [],
             "synonyms": [],
             "domains": [],
             "classes": [],

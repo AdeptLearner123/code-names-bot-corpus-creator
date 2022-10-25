@@ -12,11 +12,6 @@ import json
 
 CONTENT_POS = set(["noun", "proper", "verb", "adjective", "adverb"])
 
-# This is for lemmas that don't have example sentences but are commonly known
-MANUAL_INCLUDE = set([
-    "m_en_gbus1189026.002"  # scuba diver
-])
-
 
 def get_sense_pos(definitions_cache):
     sense_pos = dict()
@@ -33,13 +28,7 @@ def get_sense_pos(definitions_cache):
 
 
 def get_filtered_senses(sense_pos):
-    sense_ids = []
-
-    for sense_id, pos in sense_pos.items():        
-        if sense_id in MANUAL_INCLUDE or pos in CONTENT_POS:
-            sense_ids.append(sense_id)
-    
-    return sense_ids
+    return [ sense_id for sense_id, pos in sense_pos.items() if pos in CONTENT_POS ]
 
 
 def extract_sense_data(sense_json):

@@ -1,5 +1,6 @@
 from code_names_bot_dictionary_compiler.download.caches import OxfordDefinitionsCache, OxfordSentencesCache
 from code_names_bot_dictionary_compiler.oxford_utils.sense_iterator import iterate_senses
+from code_names_bot_dictionary_compiler.oxford_utils.cross_references import get_cross_references
 from config import OXFORD_FILTERED_2, OXFORD_FILTERED_3
 
 import json
@@ -61,12 +62,21 @@ def get_entry_variants(entry):
     return variants
 
 
-def enhance_sense(entry, sense, meta, dictionary, sentence_counts):
+def get_derivatives(lexical_entry):
+    if "derivatives" not in lexical_entry:
+        return []
+    
+    return [ derivative["text"] for derivative in lexical_entry["derivatives"] ]
+
+
+def enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts):
     sense_id = sense["id"]
     if sense_id not in dictionary:
         return
     
     lemma = dictionary[sense_id]["lemma"]
+
+    derivatives = get_derivatives(lexical_entry)
 
     variants = get_entry_variants(entry)
 
@@ -78,9 +88,10 @@ def enhance_sense(entry, sense, meta, dictionary, sentence_counts):
     variants = list(variants)
 
     sense_idx, is_subsense = meta
-    
+
     dictionary[sense_id].update({
         "variants": variants + sense_variants,
+        "derivatives": derivatives,
         "synonyms": synonyms,
         "domains": domains,
         "classes": classes,
@@ -92,15 +103,36 @@ def enhance_sense(entry, sense, meta, dictionary, sentence_counts):
     })
 
 
+def enhance_with_cross_references(dictionary, definitions_cache):
+    # "Second World War" is not listed as a variant form in the entry for "World War II"
+    # but "World War II" is listed as a cross reference in the entry for "Second World War"
+    lemma_to_senses = defaultdict(lambda: [])
+    for sense_id, entry in dictionary.items():
+        lemma = entry["lemma"]
+        lemma_to_senses[lemma.lower()].append(sense_id)
+    
+    cross_references = get_cross_references(definitions_cache)
+    for reference_text, lemma, sense in cross_references:
+        reference_text = reference_text.lower()
+        if reference_text in lemma_to_senses and len(lemma_to_senses[reference_text]) == 1:
+            referenced_sense = lemma_to_senses[reference_text][0]
+            dictionary[referenced_sense]["variants"].append(lemma)
+
+
 def main():
     with open(OXFORD_FILTERED_2, "r") as file:
         dictionary = json.loads(file.read())
 
     definitions_cache = OxfordDefinitionsCache()
+
+    print("Status:", "Enhancing senses")
     sentence_counts = get_sense_sentence_counts()
 
-    for _, entry, sense, meta in iterate_senses(definitions_cache):
-        enhance_sense(entry, sense, meta, dictionary, sentence_counts)
+    for lexical_entry, entry, sense, meta in iterate_senses(definitions_cache):
+        enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts)
+
+    print("Status:", "Enhancing with cross references")
+    enhance_with_cross_references(dictionary, definitions_cache)
 
     with open(OXFORD_FILTERED_3, "w+") as file:
         file.write(json.dumps(dictionary, sort_keys=True, indent=4, ensure_ascii=False))
