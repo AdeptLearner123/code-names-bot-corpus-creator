@@ -1,8 +1,24 @@
-from code_names_bot_dictionary_compiler.download.caches import OxfordDefinitionsCache
+from code_names_bot_dictionary_compiler.download.caches import OxfordDefinitionsCache, OxfordSentencesCache
 from code_names_bot_dictionary_compiler.oxford_utils.sense_iterator import iterate_senses
 from config import OXFORD_FILTERED_2, OXFORD_FILTERED_3
 
 import json
+from collections import defaultdict
+
+def get_sense_sentence_counts():
+    sentences_cache = OxfordSentencesCache()
+    query_to_result = sentences_cache.get_key_to_value()
+    sentence_counts = defaultdict(lambda: 0)
+
+    for results_str in query_to_result.values():
+        results = json.loads(results_str)
+        for result in results["results"]:
+            for lexical_entry in result["lexicalEntries"]:
+                for sentence in lexical_entry["sentences"]:
+                    for sense_id in set(sentence["senseIds"]):
+                        sentence_counts[sense_id] += 1
+
+    return sentence_counts
 
 def extract_sense_data(lemma, sense_json):
     synonyms, domains, variant_forms, classes = [], [], [], []
@@ -45,7 +61,7 @@ def get_entry_variants(entry):
     return variants
 
 
-def enhance_sense(entry, sense, meta, dictionary):
+def enhance_sense(entry, sense, meta, dictionary, sentence_counts):
     sense_id = sense["id"]
     if sense_id not in dictionary:
         return
@@ -62,16 +78,17 @@ def enhance_sense(entry, sense, meta, dictionary):
     variants = list(variants)
 
     sense_idx, is_subsense = meta
-    dictionary[sense_id]["meta"].update({
-        "sense_idx": sense_idx,
-        "is_subsense": is_subsense
-    })
-
+    
     dictionary[sense_id].update({
         "variants": variants + sense_variants,
         "synonyms": synonyms,
         "domains": domains,
-        "classes": classes
+        "classes": classes,
+        "meta": {
+            "sense_idx": sense_idx,
+            "is_subsense": is_subsense,
+            "sentence_count": sentence_counts[sense_id]
+        }
     })
 
 
@@ -80,8 +97,10 @@ def main():
         dictionary = json.loads(file.read())
 
     definitions_cache = OxfordDefinitionsCache()
+    sentence_counts = get_sense_sentence_counts()
+
     for _, entry, sense, meta in iterate_senses(definitions_cache):
-        enhance_sense(entry, sense, meta, dictionary)
+        enhance_sense(entry, sense, meta, dictionary, sentence_counts)
 
     with open(OXFORD_FILTERED_3, "w+") as file:
         file.write(json.dumps(dictionary, sort_keys=True, indent=4, ensure_ascii=False))

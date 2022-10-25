@@ -8,37 +8,14 @@ from code_names_bot_dictionary_compiler.oxford_utils.sense_iterator import itera
 
 from config import OXFORD_FILTERED_1, OXFORD_FILTERED_2
 
-from tqdm import tqdm
 import json
-from collections import defaultdict
 
 CONTENT_POS = set(["noun", "proper", "verb", "adjective", "adverb"])
-SENTENCE_COUNT_THRESHOLD = 4
 
 # This is for lemmas that don't have example sentences but are commonly known
 MANUAL_INCLUDE = set([
     "m_en_gbus1189026.002"  # scuba diver
 ])
-
-
-def get_sense_sentence_counts(lemmas):
-    sentences_cache = OxfordSentencesCache()
-    query_to_result = sentences_cache.get_key_to_value()
-    sentence_counts = defaultdict(lambda: 0)
-
-    for lemma in lemmas:
-        if lemma not in query_to_result:
-            continue
-
-        results_str = query_to_result[lemma]
-        results = json.loads(results_str)
-        for result in results["results"]:
-            for lexical_entry in result["lexicalEntries"]:
-                for sentence in lexical_entry["sentences"]:
-                    for sense_id in set(sentence["senseIds"]):
-                        sentence_counts[sense_id] += 1
-
-    return sentence_counts
 
 
 def get_sense_pos(definitions_cache):
@@ -55,11 +32,11 @@ def get_sense_pos(definitions_cache):
     return sense_pos
 
 
-def get_filtered_senses(sentence_counts, sense_pos):
+def get_filtered_senses(sense_pos):
     sense_ids = []
 
     for sense_id, pos in sense_pos.items():        
-        if sense_id in MANUAL_INCLUDE or pos == "proper" or (pos in CONTENT_POS and sentence_counts[sense_id] >= SENTENCE_COUNT_THRESHOLD):
+        if sense_id in MANUAL_INCLUDE or pos in CONTENT_POS:
             sense_ids.append(sense_id)
     
     return sense_ids
@@ -83,7 +60,7 @@ def format_lemma(lemma):
     return lemma
 
 
-def create_dictionary(filtered_senses, sense_pos, sentence_counts):
+def create_dictionary(filtered_senses, sense_pos):
     definitions_cache = OxfordDefinitionsCache()
     definitions = dict()
 
@@ -93,7 +70,6 @@ def create_dictionary(filtered_senses, sense_pos, sentence_counts):
             continue
 
         pos = sense_pos[sense_id]
-        sentence_count = sentence_counts[sense_id]
 
         lemma_text = lexical_entry["text"]
 
@@ -116,10 +92,7 @@ def create_dictionary(filtered_senses, sense_pos, sentence_counts):
                 "source": "OX",
                 "pos": pos,
                 "definition": definition,
-                "texts": texts + notes,
-                "meta": {
-                    "sentence_count": sentence_count
-                }
+                "texts": texts + notes
             }
 
     return definitions
@@ -132,17 +105,14 @@ def main():
 
     definitions_cache = OxfordDefinitionsCache()
 
-    print("Status:", "get sentence counts")
-    sentence_counts = get_sense_sentence_counts(lemmas)
-
     print("Status:", "get sense pos")
     sense_pos = get_sense_pos(definitions_cache)
 
     print("Status:", "filtering")
-    filtered_senses = get_filtered_senses(sentence_counts, sense_pos)
+    filtered_senses = get_filtered_senses(sense_pos)
 
     print("Status:", "creating dictionary")
-    dictionary = create_dictionary(filtered_senses, sense_pos, sentence_counts)
+    dictionary = create_dictionary(filtered_senses, sense_pos)
 
     print("Total senses", len(dictionary))
 
