@@ -29,6 +29,7 @@ get-dump-wiki-page-views        = "tools.get_dump_wiki_page_views:main"
 get-multi-def-words             = "tools.get_multi_def_words:main"
 get-derivatives                 = "tools.get_derivatives:main"
 get-cross-references            = "tools.get_cross_references:main"
+get-duplicate-definitions       = "tools.get_duplicate_definitions:main"
 
 test-dict                       = "unit_tests.test_dict:main"
 test-wiki-variants              = "unit_tests.test_wiki_variants_extractor:main"

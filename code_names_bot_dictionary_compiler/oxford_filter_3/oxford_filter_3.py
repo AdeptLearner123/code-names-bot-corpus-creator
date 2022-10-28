@@ -21,6 +21,22 @@ def get_sense_sentence_counts():
 
     return sentence_counts
 
+
+def get_sense_pos(definitions_cache):
+    sense_pos = dict()
+    for lexical_entry, entry, sense, _ in iterate_senses(definitions_cache):
+        sense_id = sense["id"]
+        lexical_category = lexical_entry["lexicalCategory"]["id"]
+
+        grammatical_features = []
+        if "grammaticalFeatures" in entry:
+            grammatical_features = set([ item["id"] for item in entry["grammaticalFeatures"] ])
+
+        is_proper = "proper" in grammatical_features or (lexical_category == "noun" and lexical_entry["text"][0].isupper())
+        sense_pos[sense_id] = "proper" if is_proper else lexical_category
+    return sense_pos
+
+
 def extract_sense_data(lemma, sense_json):
     synonyms, domains, variant_forms, classes = [], [], [], []
 
@@ -69,7 +85,7 @@ def get_derivatives(lexical_entry):
     return [ derivative["text"] for derivative in lexical_entry["derivatives"] ]
 
 
-def enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts):
+def enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts, sense_pos):
     sense_id = sense["id"]
     if sense_id not in dictionary:
         return
@@ -90,11 +106,12 @@ def enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts
     sense_idx, is_subsense = meta
 
     dictionary[sense_id].update({
-        "variants": variants + sense_variants,
+        "variants": variants,
         "derivatives": derivatives,
         "synonyms": synonyms,
         "domains": domains,
         "classes": classes,
+        "pos": sense_pos[sense_id],
         "meta": {
             "sense_idx": sense_idx,
             "is_subsense": is_subsense,
@@ -114,9 +131,19 @@ def enhance_with_cross_references(dictionary, definitions_cache):
     cross_references = get_cross_references(definitions_cache)
     for reference_text, lemma, sense in cross_references:
         reference_text = reference_text.lower()
-        if reference_text in lemma_to_senses and len(lemma_to_senses[reference_text]) == 1:
+
+        if reference_text not in lemma_to_senses:
+            continue
+
+        referenced_senses = lemma_to_senses[reference_text]
+        if len(lemma_to_senses[reference_text]) == 1:
             referenced_sense = lemma_to_senses[reference_text][0]
             dictionary[referenced_sense]["variants"].append(lemma)
+            continue
+        
+        candidate_senses = [ sense for sense in referenced_senses if lemma in dictionary[sense]["synonyms"]]
+        if len(candidate_senses) == 1:
+            dictionary[candidate_senses[0]]["variants"].append(lemma)
 
 
 def main():
@@ -128,8 +155,11 @@ def main():
     print("Status:", "Enhancing senses")
     sentence_counts = get_sense_sentence_counts()
 
+    print("Status:", "Get sense pos")
+    sense_pos = get_sense_pos(definitions_cache)
+
     for lexical_entry, entry, sense, meta in iterate_senses(definitions_cache):
-        enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts)
+        enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts, sense_pos)
 
     print("Status:", "Enhancing with cross references")
     enhance_with_cross_references(dictionary, definitions_cache)

@@ -13,22 +13,14 @@ import json
 CONTENT_POS = set(["noun", "proper", "verb", "adjective", "adverb"])
 
 
-def get_sense_pos(definitions_cache):
-    sense_pos = dict()
-    for lexical_entry, entry, sense, _ in iterate_senses(definitions_cache):
+def get_filtered_senses(definitions_cache):
+    sense_ids = set()
+    for lexical_entry, _, sense, _ in iterate_senses(definitions_cache):
         sense_id = sense["id"]
         lexical_category = lexical_entry["lexicalCategory"]["id"]
-
-        grammatical_features = []
-        if "grammaticalFeatures" in entry:
-            grammatical_features = set([ item["id"] for item in entry["grammaticalFeatures"] ])
-
-        sense_pos[sense_id] = "proper" if "proper" in grammatical_features else lexical_category
-    return sense_pos
-
-
-def get_filtered_senses(sense_pos):
-    return [ sense_id for sense_id, pos in sense_pos.items() if pos in CONTENT_POS ]
+        if lexical_category in CONTENT_POS:
+            sense_ids.add(sense_id)
+    return list(sense_ids)
 
 
 def extract_sense_data(sense_json):
@@ -49,7 +41,7 @@ def format_lemma(lemma):
     return lemma
 
 
-def create_dictionary(filtered_senses, sense_pos):
+def create_dictionary(filtered_senses):
     definitions_cache = OxfordDefinitionsCache()
     definitions = dict()
 
@@ -57,8 +49,6 @@ def create_dictionary(filtered_senses, sense_pos):
         sense_id = sense["id"]
         if sense_id not in filtered_senses:
             continue
-
-        pos = sense_pos[sense_id]
 
         lemma_text = lexical_entry["text"]
 
@@ -79,7 +69,6 @@ def create_dictionary(filtered_senses, sense_pos):
             definitions[sense_id] = {
                 "lemma": format_lemma(lemma_text),
                 "source": "OX",
-                "pos": pos,
                 "definition": definition,
                 "texts": texts + notes
             }
@@ -94,14 +83,11 @@ def main():
 
     definitions_cache = OxfordDefinitionsCache()
 
-    print("Status:", "get sense pos")
-    sense_pos = get_sense_pos(definitions_cache)
-
     print("Status:", "filtering")
-    filtered_senses = get_filtered_senses(sense_pos)
+    filtered_senses = get_filtered_senses(definitions_cache)
 
     print("Status:", "creating dictionary")
-    dictionary = create_dictionary(filtered_senses, sense_pos)
+    dictionary = create_dictionary(filtered_senses)
 
     print("Total senses", len(dictionary))
 
