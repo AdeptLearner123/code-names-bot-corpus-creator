@@ -6,7 +6,7 @@ from code_names_bot_dictionary_compiler.download.caches import (
 from code_names_bot_dictionary_compiler.utils.spacy_utils import split_format_sentences
 from code_names_bot_dictionary_compiler.oxford_utils.sense_iterator import iterate_senses
 
-from config import ALL_LEMMAS, OXFORD_FILTERED_2
+from config import OXFORD_FILTERED_1, OXFORD_FILTERED_2
 
 import json
 
@@ -77,7 +77,7 @@ def create_dictionary(filtered_senses):
 
 
 def main():
-    with open(ALL_LEMMAS, "r") as file:
+    with open(OXFORD_FILTERED_1, "r") as file:
         lemma_regions = file.read().splitlines()
         lemmas = [lemma_region.split("|")[0] for lemma_region in lemma_regions]
 

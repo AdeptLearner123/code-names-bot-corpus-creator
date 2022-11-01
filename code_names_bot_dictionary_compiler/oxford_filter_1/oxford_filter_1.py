@@ -4,7 +4,7 @@ from wordfreq import word_frequency
 
 from config import OXFORD_FILTERED_1, ALL_LEMMAS
 
-FREQUENCY_THRESHOLD = 4e-8 #5.4e-8
+FREQUENCY_THRESHOLD = 0 #4e-8 #5.4e-8
 
 
 def main():

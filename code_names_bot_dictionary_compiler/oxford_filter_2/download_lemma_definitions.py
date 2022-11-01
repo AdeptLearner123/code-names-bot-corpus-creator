@@ -1,7 +1,7 @@
 import json
 from code_names_bot_dictionary_compiler.download.api_downloader import download
 from code_names_bot_dictionary_compiler.download.caches import OxfordDefinitionsCache
-from config import ALL_LEMMAS, MISSING_US_LEMMAS, MISSING_LEMMAS
+from config import OXFORD_FILTERED_1, MISSING_US_LEMMAS, MISSING_LEMMAS
 from credentials import OXFORD_APP_ID, OXFORD_APP_KEY
 
 GET_URL = (
@@ -38,7 +38,7 @@ def process_result(key, result):
 
 
 def main():
-    with open(ALL_LEMMAS, "r") as file:
+    with open(OXFORD_FILTERED_1, "r") as file:
         lemma_regions = file.read().splitlines()
         lemma_regions = list(
             map(lambda lemma_region: lemma_region.split("|"), lemma_regions)
