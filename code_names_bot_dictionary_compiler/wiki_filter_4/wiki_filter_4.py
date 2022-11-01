@@ -87,7 +87,9 @@ def main():
             "synonyms": [],
             "domains": [],
             "classes": [],
-            "meta": {}
+            "meta": {
+                "is_primary": True
+            }
         }
 
     print("Status:", "dumping")

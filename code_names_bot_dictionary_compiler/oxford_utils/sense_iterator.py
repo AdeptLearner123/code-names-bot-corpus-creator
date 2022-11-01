@@ -19,13 +19,13 @@ def iterate_senses(definitions_cache, queries = None, check_has_def=True):
         results = json.loads(results_str)
         for result in results["results"]:
             for lexical_entry in result["lexicalEntries"]:
-                for entry in lexical_entry["entries"]:
+                for entry_idx, entry in enumerate(lexical_entry["entries"]):
                     if "senses" in entry:
                         for sense_idx, sense in enumerate(entry["senses"]):
                             if not check_has_def or sense_has_def(sense):
-                                yield lexical_entry, entry, sense, (sense_idx, False)
+                                yield lexical_entry, entry, sense, (entry_idx, sense_idx, False)
 
                             if "subsenses" in sense:
                                 for subsense_idx, subsense in enumerate(sense["subsenses"]):
                                     if not check_has_def or sense_has_def(subsense):
-                                        yield lexical_entry, entry, subsense, (subsense_idx, True)
+                                        yield lexical_entry, entry, subsense, (entry_idx, subsense_idx, True)

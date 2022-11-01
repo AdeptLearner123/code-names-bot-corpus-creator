@@ -103,7 +103,8 @@ def enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts
         variants.remove(lemma)
     variants = list(variants)
 
-    sense_idx, is_subsense = meta
+    entry_idx, sense_idx, is_subsense = meta
+    is_primary_sense = not is_subsense and entry_idx == 0 and sense_idx == 0
 
     dictionary[sense_id].update({
         "variants": variants,
@@ -115,7 +116,7 @@ def enhance_sense(lexical_entry, entry, sense, meta, dictionary, sentence_counts
         "meta": {
             "sense_idx": sense_idx,
             "is_subsense": is_subsense,
-            "sentence_count": sentence_counts[sense_id]
+            "is_primary": is_primary_sense
         }
     })
 
