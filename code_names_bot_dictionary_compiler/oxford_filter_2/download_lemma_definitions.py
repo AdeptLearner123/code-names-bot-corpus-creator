@@ -64,7 +64,7 @@ def main():
         ),
         cache=OxfordDefinitionsCache(),
         process_result=process_result,
-        chunk_size=5,
+        chunk_size=CHUNK_SIZE,
         download_rate=1,  # Oxford API limits usage to 1 request / second
     )
 
